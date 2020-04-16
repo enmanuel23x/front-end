@@ -255,24 +255,40 @@ class Home extends Component {
         if (status === 1){
             axios.post('/email/send', {"email": email, "subject": lack_skill,
                 // eslint-disable-next-line no-useless-concat
-                "text":"Colaborador: "+ obj.state.name +'\n' + "Correo: " + obj.state.email + '\n' + "Mensaje: " + obj.state.message}).then((res) =>{
-                Swal.fire(
-                    'Mensaje Enviado!',
-                    'Pronto actualizaremos la lista...',
-                    'success'
-                )
+                "text":"Colaborador: "+ obj.state.name +'\n' + "Correo: " + obj.state.email + '\n' + "Mensaje: " + obj.state.message}).then((res) =>{              
+                Swal.fire({
+                      icon: 'success',
+                      title: 'Mensaje enviado!',
+                      html: 'Pronto actualizaremos la lista',
+                      timer: 2000,
+                      timerProgressBar: true,
+                  }).then((result) => {
+                      if (result.dismiss === Swal.DismissReason.timer) {
+                          obj.setState({
+                              message: ""
+                          });
+                      }
+                  });              
             }).catch((err) => {
                 console.log(err)
             })
         } else if (status === 0) {
             axios.post('/email/send', {"email": email, "subject": unregistered,
                 // eslint-disable-next-line no-useless-concat
-                "text":"Colaborador: "+ obj.state.name +'\n' + "Correo: " + obj.state.email + '\n' + "Mensaje: " + obj.state.message}).then((res) =>{
-                Swal.fire(
-                    'Mensaje Enviado!',
-                    'Pronto te añadiremos a la lista...',
-                    'success'
-                )
+                "text":"Colaborador: "+ obj.state.name +'\n' + "Correo: " + obj.state.email + '\n' + "Mensaje: " + obj.state.message}).then((res) =>{                
+                Swal.fire({
+                      icon: 'success',
+                      title: 'Mensaje enviado!',
+                      html: 'Pronto te añadiremos a la lista...',
+                      timer: 2000,
+                      timerProgressBar: true,
+                  }).then((result) => {
+                      if (result.dismiss === Swal.DismissReason.timer) {
+                          obj.setState({
+                              message: ""
+                          });
+                      }
+                  });
             }).catch((err) => {
                 console.log(err)
             })
