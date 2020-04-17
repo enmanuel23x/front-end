@@ -11,6 +11,9 @@ import timeZoneConverter from 'time-zone-converter';
 const axios = require('axios').default;
 const skillsPerPage = 1;
 
+//Base API URL
+axios.defaults.baseURL = http://10.48.13.156:4080
+
 /* Write here the email address that will receive the messages  */
 const email = "agonzalez@intelix.biz";
 
