@@ -11,6 +11,9 @@ const axios = require('axios').default;
 axios.defaults.baseURL = config.backURL;
 const skillsPerPage = 1;
 
+/* Base API URL */
+axios.defaults.baseURL = 'http://10.48.13.156:4080';
+
 /* Write here the email address that will receive the messages  */
 const email = config.email;
 
