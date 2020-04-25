@@ -5,9 +5,10 @@ import LogOut from './LogOut';
 class Navigation extends Component {
     constructor(props) {
         super(props);
+        console.log(sessionStorage.getItem("name"));
         this.state = {
             name: sessionStorage.getItem("name")
-            console.log(sessionStorage.getItem("name"));
+            
         }
     }
 
