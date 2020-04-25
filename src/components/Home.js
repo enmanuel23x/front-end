@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Navigation from "./external/Navigation";
 import Footer from "./external/Footer";
 //import FloatButtom from "./external/FloatButtom"
-//import keycloak from "./auth/keycloak"
 import { NavLink } from 'react-router-dom'
 
 
