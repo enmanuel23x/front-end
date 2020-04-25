@@ -7,6 +7,7 @@ class Navigation extends Component {
         super(props);
         this.state = {
             name: sessionStorage.getItem("name")
+            console.log(sessionStorage.getItem("name"));
         }
     }
 
