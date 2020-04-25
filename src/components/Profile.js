@@ -20,8 +20,8 @@ class Home extends Component {
     super(props);
 
     this.state = {
-        email: sessionStorage.getItem("email"),
-        name: sessionStorage.getItem("name"),
+        email: localStorage.getItem("email"),
+        name: localStorage.getItem("name"),
         id: null,
         userSkill: null,
         skills: null,
@@ -69,7 +69,7 @@ class Home extends Component {
     charge(){
       let days = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
       let obj=this;
-      let email=sessionStorage.getItem("email");
+      let email=localStorage.getItem("email");
       axios.get('/rg/resources/ids').then(function (res1) {
           axios.post('/rg/resources/emails',{ids:res1.data}).then(function (res2) {
               let index = res2.data.reduce(function(acc, curr, index) { if (curr === email) {acc.push(index);}return acc;}, []);
