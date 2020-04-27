@@ -350,7 +350,16 @@ class Home extends Component {
              <div>
                  <div className="row pt-4">
                      <div className="col">
-                         <h5>Habilidades disponibles</h5>
+                         <h5>Mis Conocimientos
+                             <div className="tooltip-message">
+                                 <i className="fa fa-info-circle"></i>
+                                 <span className="message">
+                                     Basico: ...
+                                     Medio: ...
+                                     Avanzado: ...
+                             </span>
+                             </div></h5>
+
                          {renderskills}
                          <div>
                              {this.state.currentPage == 1 && <button disabled className="btn btn-secondary">Atras</button>}
@@ -361,7 +370,7 @@ class Home extends Component {
                      </div>
                      <div className="hr-vertical"></div>
                      <div className="col">
-                         <h5>Tus habilidades</h5>
+                         <h5>Mis Conocimientos</h5>
                          <div className="container paginationCont">
                              <h4> </h4>
                              <table className="table table-striped">
