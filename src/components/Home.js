@@ -16,8 +16,38 @@ class Home extends Component {
                     <div className="box">
                         <div className="row">
                             <div className="col">
-                                <h1 className="welcome-header">Bienvenido a nuestra nueva app de Mapeo de Conocimientos.</h1>
-                                <NavLink exact to="/perfil"><button className="btn btn-dark welcome-header">Ver Perfil</button></NavLink>
+                                <div className="row">
+                                    <h1 className="welcome-header">Bienvenido a nuestra herramienta de mapeo de conocimiento </h1>
+                                    <NavLink exact to="/perfil"><button className="btn btn-dark welcome-header">Ver Perfil</button></NavLink>
+                                </div>
+                                <div className="row">
+                                    <hr/></div>
+                                <div className="row">
+                                    <h3>Leyenda de habilidades</h3>
+                                    <table className="table table">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Nivel de Habilidad</th>
+                                            <th scope="col">Descripción</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>Básico</td>
+                                            <td>...</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>Medio</td>
+                                            <td>...</td>
+                                        </tr>
+                                        <tr>
+                                            <td >Avanzado</td>
+                                            <td>...</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                             <div className="col">
                                 <div className="home-img-container">
