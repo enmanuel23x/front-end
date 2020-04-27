@@ -1,7 +1,7 @@
 
 .register-photo .image-holder, .image-holder{
   display: table-cell;
-  background: url(/img/login.png);
+  background: url(/img/login-min.png);
   background-size: cover;
 }
 
