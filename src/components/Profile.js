@@ -96,7 +96,7 @@ class Home extends Component {
       function getDate(){
           axios.post('bd/data', {email: localStorage.getItem("email")})
               .then((res) => {
-                  //console.log(res.data)
+           //       console.log(res.data)
                   let first_day = new Date(res.data[0].first_conn);
                   let first_dayName = days[first_day.getDay()];
                   let last_day = new Date(res.data[0].last_conn);
@@ -108,8 +108,8 @@ class Home extends Component {
                   obj.state.first_conn = first_connection;
                   obj.state.last_conn = last_connection;
                   // console.log("previa: ", obj.state.last_conn);
-                  axios.post('bd/update', {email: sessionStorage.getItem("email"), create: false}).then(response => {
-                      axios.post('bd/data', {email: sessionStorage.getItem("email")}).then(res2 => {
+                  axios.post('bd/update', {email: localStorage.getItem("email"), create: false}).then(response => {
+                      axios.post('bd/data', {email: localStorage.getItem("email")}).then(res2 => {
                           obj.state.last_conn_updated = timeZoneConverter(res2.data[0].last_conn, 0, -4, 'YYYY/MM/DD HH:mm:ss');
                           // console.log("actual: ", obj.state.last_conn_updated)
                       })
@@ -260,7 +260,7 @@ class Home extends Component {
     }
     submitForm(e, status){
         let lack_skill = "Mapeo Conocimiento: Notificacion de falta de habilidad";
-        let unregistered = "Usuario no registrado";
+        let unregistered = "Mapeo Conocimiento: Notificación para creación de usuario";
         e.preventDefault();
         let obj = this;
         if (status === 1){
@@ -331,7 +331,7 @@ class Home extends Component {
           <div className="content">
           <h1 className="title">EVOLUCIONA JUNTO A LA TECNOLOGIA</h1>
           <div className="box">
-            <h1>Mapa de competencias técnicas</h1>
+            <h1>Mapa de Conocimientos</h1>
             {this.state.defined === false &&
             <div>
                 <div className="row">
@@ -340,12 +340,11 @@ class Home extends Component {
                             <form onSubmit={(e) => {
                                 this.submitForm(e, 0)
                             }}>
-                                <h4 className="mt-5 mb-3">Parece que no estas registrado :(</h4>
-                                <h6>Haznoslo saber!</h6>
+                                <h4 className="mt-5 mb-3">Parece que no estas registrado.</h4>
                                 <div className="form-group">
                                     <label htmlFor="message">Mensaje</label>
                                     <textarea className="form-control" id="message" rows="3"
-                                              placeholder="Indicanos que falta...!" value={this.state.message}
+                                              placeholder="Comunícate con nosotros...!" value={this.state.message}
                                               onChange={this.onChangeMessage} required={true}/>
                                 </div>
                                 <button type="submit" className="btn btn-primary">Enviar</button>
@@ -439,7 +438,7 @@ class Home extends Component {
                                  <div className="form-group">
                                      <label htmlFor="message">Mensaje</label>
                                      <textarea className="form-control" id="message" rows="3"
-                                               placeholder="Indicanos cual..!" value={this.state.message}
+                                               placeholder="Indicanos cual...!" value={this.state.message}
                                      onChange={this.onChangeMessage} required={true}/>
                                  </div>
                                  <button type="submit" className="btn btn-primary">Enviar</button>
