@@ -34,16 +34,15 @@ class Home extends Component {
                                         <tbody>
                                         <tr>
                                             <td>Básico</td>
-                                            <td>...</td>
-
+                                            <td>Has completado exitosamente cursos en línea o presenciales sobre la tecnología.</td>
                                         </tr>
                                         <tr>
                                             <td>Medio</td>
-                                            <td>...</td>
+                                            <td>Has acumulado al menos seis meses de experiencia total en la tecnología a través de la culminación exitosa de solicitudes.</td>
                                         </tr>
                                         <tr>
                                             <td >Avanzado</td>
-                                            <td>...</td>
+                                            <td>Has acumulado más de seis meses de experiencia total en la tecnología a través de la culminación exitosa de solicitudes.</td>
                                         </tr>
                                         </tbody>
                                     </table>

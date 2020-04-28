@@ -354,10 +354,12 @@ class Home extends Component {
                              <div className="tooltip-message">
                                  <i className="fa fa-info-circle"></i>
                                  <span className="message">
-                                     Basico: ...
-                                     Medio: ...
-                                     Avanzado: ...
-                             </span>
+                                     <ul>
+                                         <li><strong>Basico:</strong> Has completado exitosamente cursos en línea o presenciales sobre la tecnología.</li>
+                                         <li><strong>Medio:</strong> Has acumulado al menos seis meses de experiencia total en la tecnología a través de la culminación exitosa de solicitudes.</li>
+                                         <li><strong>Avanzado:</strong> Has acumulado más de seis meses de experiencia total en la tecnología a través de la culminación exitosa de solicitudes.</li>
+                                     </ul>
+                                 </span>
                              </div></h5>
 
                          {renderskills}
@@ -424,11 +426,11 @@ class Home extends Component {
                              <form onSubmit={(e) => {
                                  this.submitForm(e, 1)
                              }}>
-                                 <h4 className="mt-5 mb-3">¿No encuentras tu habilidad enlistada?</h4>
+                                 <h4 className="mt-5 mb-3">¿Posees un conocimiento y no lo ves en la lista?</h4>
                                  <div className="form-group">
                                      <label htmlFor="message">Mensaje</label>
                                      <textarea className="form-control" id="message" rows="3"
-                                               placeholder="Indicanos que falta...!" value={this.state.message}
+                                               placeholder="Indicanos cual..!" value={this.state.message}
                                      onChange={this.onChangeMessage} required={true}/>
                                  </div>
                                  <button type="submit" className="btn btn-primary">Enviar</button>

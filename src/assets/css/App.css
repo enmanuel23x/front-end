@@ -303,15 +303,17 @@ footer .fa {
 .tooltip-message .message{
   visibility: hidden;
   width: 120px;
-  background-color: black;
+  background-color: #484848;
   color: #fff;
-  text-align: center;
+  text-align: left;
   border-radius: 6px;
   padding: 5px 0;
+  font-size: 15px;
 
   /* Position the tooltip */
-  position: relative;
+  position: absolute;
   z-index: 1;
+  width: 500px;
 }
 
 .tooltip-message:hover .message {
