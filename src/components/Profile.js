@@ -7,6 +7,7 @@ import Footer from "./external/Footer";
 import Swal from 'sweetalert2'
 import timeZoneConverter from 'time-zone-converter';
 import config from '../config/config';
+import categorias from '../config/skills.config';
 const axios = require('axios').default;
 axios.defaults.baseURL = config.backURL;
 const skillsPerPage = 1;
@@ -168,12 +169,11 @@ class Home extends Component {
               custom_levels.push(obj2[i].id);
           }
           for (let i = 0; i < custom_fields.length; i++) {
-              categories.push(custom_fields[i].split("-")[0])
+              categories.push(obj.fillcategorys(custom_fields[i].split("/")[0]))
           }
-          
 
           for (let i = 0; i < custom_fields.length; i++) {
-              values.push(custom_fields[i].split("-")[1])
+              values.push(custom_fields[i].split("/")[0])
           }
           values = values.filter((v, i, a) => a.indexOf(v) === i);
 
@@ -208,6 +208,15 @@ class Home extends Component {
         console.error(error)
     });
     }
+    fillcategorys(name){
+        let s=""
+        categorias.categorias.forEach(element => {
+            if(element.skills.filter( item =>  item==name).length!=0){
+               s = element.name;
+            }
+        });
+        return s;
+    }
     btnPrevClick() {
         if((this.state.currentPage -1)%this.state.pageBound === 0 ){
             this.setState({upperPageBound: this.state.upperPageBound - this.state.pageBound});
@@ -234,7 +243,7 @@ class Home extends Component {
         const res = skills[0].filter(item => item.levels.basic == id || item.levels.advanced == id || item.levels.medium == id );
         let l = res[0].levels.medium == id ? "Medio" : "Basico";
             l = res[0].levels.advanced == id ? "Avanzado" : l;
-            l = title+"-"+res[0].value+"-"+l
+            l = res[0].value+"/"+l
         let us 
         if(res.length!=0){
             this.setState({userSkill:this.state.userSkill.filter( item => item.id != res[0].levels.basic && item.id != res[0].levels.medium && item.id != res[0].levels.advanced)},
@@ -350,7 +359,7 @@ class Home extends Component {
              <div>
                  <div className="row pt-4">
                      <div className="col">
-                         <h5>Mis Conocimientos
+                         <h5>Conocimientos Disponibles
                              <div className="tooltip-message">
                                  <i className="fa fa-info-circle"></i>
                                  <span className="message">
@@ -388,8 +397,8 @@ class Home extends Component {
                                  {React.Children.toArray(this.state.userSkill.filter(item => item.name =="Skills").map((item, i) =>
                                      <tr>
                                          <th scope="row">{i+1}</th>
-                                         <th scope="row">{item.value.split("-")[1]}</th>
-                                         <th scope="row">{item.value.split("-")[2]}</th>
+                                         <th scope="row">{item.value.split("/")[0]}</th>
+                                         <th scope="row">{item.value.split("/")[1]}</th>
                                          <th scope="row">
                                              <button className="btn btn-danger" value={item.id} onClick={this.deleteUserSkill}>Eliminar</button>
                                          </th>
