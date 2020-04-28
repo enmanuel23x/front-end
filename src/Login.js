@@ -32,7 +32,7 @@ esta funcion solo es llamada cuando el inicio de sesion es exitoso
 Si ocurre un error no se almacena la sesion y se muestra una alerta
 */
 const responseGoogle = (response) => {
-  if(response.profileObj.email!=null && response.profileObj.email!=undefined){
+  if(response.profileObj.email!==null && response.profileObj.email!==undefined){
     localStorage.setItem("email", response.profileObj.email);
     localStorage.setItem("name", response.profileObj.name);
     window.location.reload();
