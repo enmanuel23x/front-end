@@ -117,10 +117,10 @@ class Home extends Component {
               })
       }
 
-      axios.post('bd/data', {email: sessionStorage.getItem("email")})
+      axios.post('bd/data', {email: localStorage.getItem("email")})
           .then((res) => {
               if (res.data.length === 0){
-                  axios.post('bd/update', {email: sessionStorage.getItem("email"), create: true})
+                  axios.post('bd/update', {email: localStorage.getItem("email"), create: true})
                       .then(res => {
                           //console.log("ok", res)
                       }).then(()=> {
@@ -266,7 +266,7 @@ class Home extends Component {
         if (status === 1){
             axios.post('/email/send', {"email": email, "subject": lack_skill,
                 // eslint-disable-next-line no-useless-concat
-                "text":"Colaborador: "+ sessionStorage.getItem("name") +'\n' + "Correo: " + sessionStorage.getItem("email") + '\n' + "Mensaje: " + obj.state.message}).then((res) =>{
+                "text":"Colaborador: "+ localStorage.getItem("name") +'\n' + "Correo: " + localStorage.getItem("email") + '\n' + "Mensaje: " + obj.state.message}).then((res) =>{
                 Swal.fire({
                     icon: 'success',
                     title: 'Mensaje enviado!',
@@ -287,7 +287,7 @@ class Home extends Component {
         } else if (status === 0) {
             axios.post('/email/send', {"email": email, "subject": unregistered,
                 // eslint-disable-next-line no-useless-concat
-                "text":"Colaborador: "+ sessionStorage.getItem("name") +'\n' + "Correo: " + sessionStorage.getItem("email") + '\n' + "Mensaje: " + obj.state.message}).then((res) =>{
+                "text":"Colaborador: "+ localStorage.getItem("name") +'\n' + "Correo: " + localStorage.getItem("email") + '\n' + "Mensaje: " + obj.state.message}).then((res) =>{
                 Swal.fire({
                     icon: 'success',
                     title: 'Mensaje enviado!',
