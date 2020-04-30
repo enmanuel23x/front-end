@@ -371,11 +371,11 @@ class Home extends Component {
             }
             {this.state.defined === true &&
              <div>
-                 <div className="row pt-4">
-                     <div className="col">
-                         <h5>Conocimientos Disponibles
+                 <div className="row">
+                     <div className="col pt-4">
+                         <h5 className="custom-h5">Conocimientos Disponibles
                              <div className="tooltip-message">
-                                 <i className="fa fa-info-circle"></i>
+                                 <i className="fa fa-info-circle h5"></i>
                                  <span className="message">
                                      <ul>
                                          <li><strong>Básico:</strong> Has completado exitosamente cursos en línea o presenciales sobre la tecnología.</li>
@@ -383,8 +383,8 @@ class Home extends Component {
                                          <li><strong>Avanzado:</strong> Has acumulado más de seis meses de experiencia total en la tecnología a través de la culminación exitosa de solicitudes.</li>
                                      </ul>
                                  </span>
-                             </div></h5>
-
+                             </div>
+                         </h5>
                          {renderskills}
                          <div>
                              {this.state.currentPage == 1 && <button disabled className="btn btn-secondary">Atrás</button>}
@@ -394,7 +394,7 @@ class Home extends Component {
                          </div>
                      </div>
                      <div className="hr-vertical"></div>
-                     <div className="col">
+                     <div className="col pt-4">
                          <h5>Mis Conocimientos</h5>
                          <div className="container paginationCont">
                              <h4> </h4>
