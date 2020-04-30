@@ -453,7 +453,7 @@ class Home extends Component {
                                  <div className="form-group">
                                      <label htmlFor="message">Mensaje</label>
                                      <textarea className="form-control" id="message" rows="3"
-                                               placeholder="Indícanos cual...!!" value={this.state.message}
+                                               placeholder="¡Indícanos cuál...!" value={this.state.message}
                                      onChange={this.onChangeMessage} required={true}/>
                                  </div>
                                  <button type="submit" className="btn btn-primary">Enviar</button>

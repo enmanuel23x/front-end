@@ -17,8 +17,8 @@ class Home extends Component {
                         <div className="row">
                             <div className="col">
                                 <div className="row">
-                                    <h1 className="welcome-header">Bienvenido a nuestra herramienta de mapeo de conocimientos </h1>
-                                    <NavLink exact to="/perfil"><button className="btn btn-dark welcome-header btn-perfil">Ver Perfil</button></NavLink>
+                                    <h1 className="welcome-header">Bienvenido(a) a nuestra herramienta de mapeo de conocimientos </h1>
+                                    <NavLink exact to="/perfil"><button className="btn btn-info welcome-header">Ver Perfil</button></NavLink>
                                 </div>
                                 <div className="row">
                                     <hr/></div>
