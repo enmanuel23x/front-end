@@ -121,7 +121,7 @@ class Pagination extends Component {
           <th scope="row">
             <select className="form-control" onChange={this.lvl.bind(this, index)} defaultValue={'DEFAULT'}>
               <option value='DEFAULT' disabled>-- Seleccione un nivel --</option>
-              <option value={skill.levels.basic}>Basico</option>
+              <option value={skill.levels.basic}>Básico</option>
               <option value={skill.levels.medium}>Medio</option>
               <option value={skill.levels.advanced}>Avanzado</option>
             </select>
@@ -188,7 +188,7 @@ class Pagination extends Component {
                         <tr>
                             <th scope="col">Habilidad</th>
                             <th scope="col">Nivel</th>
-                            <th scope="col">Accion</th>
+                            <th scope="col">Acción</th>
                         </tr>
                         </thead>
                         <tbody >

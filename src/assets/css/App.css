@@ -10,7 +10,7 @@ footer{
   bottom: 0;
   position: fixed;
   width: 100vw;
-  height: 80px;
+  height: 65px;
   text-align: center;
   padding: 20px;
 }
@@ -60,6 +60,10 @@ footer .fa {
 }
 .brandlink{
   content: url(/img/logo.png);
+}
+.btn-perfil{
+  background-color: #75787b!important;
+  border-color: #75787b!important;
 }
 .menu li a{
   text-decoration: none;

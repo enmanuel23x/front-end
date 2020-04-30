@@ -64,6 +64,7 @@ class Home extends Component {
                 timer: 1500
             })
         }).catch(function (error) {
+            obj.conn_err();
             console.error(error)
         });
     }
@@ -87,9 +88,11 @@ class Home extends Component {
                   obj.loadSkills(id)
               }
           }).catch(function (error) {
+            obj.conn_err();
               console.error(error)
           });
       }).catch(function (error) {
+        obj.conn_err();
           console.error(error)
       });
 
@@ -202,9 +205,11 @@ class Home extends Component {
           //console.log(obj.state)
           // Levels and ids
         }).catch(function (error) {
+            obj.conn_err();
           console.error(error)
         });
       }).catch(function (error) {
+        obj.conn_err();
         console.error(error)
     });
     }
@@ -233,6 +238,14 @@ class Home extends Component {
         let listid = this.state.currentPage + 1;
         this.setState({ currentPage : listid});
     }
+    conn_err(){
+        Swal.fire({
+            icon: 'error',
+            title: 'Ocurrió un error al cargar el servicio!',
+            html: 'Por favor revise su conexión y reintente.<br>Si el problema persiste contacte con soporte.',
+            confirmButton:true
+        })
+    }
     deleteUserSkill(e){
         e.preventDefault();
         const id=e.target.value
@@ -241,7 +254,7 @@ class Home extends Component {
     addUserSkill(id,title){
         const skills= this.state.custom_skills.filter(item => item.title == title).map(item => item.fields);
         const res = skills[0].filter(item => item.levels.basic == id || item.levels.advanced == id || item.levels.medium == id );
-        let l = res[0].levels.medium == id ? "Medio" : "Basico";
+        let l = res[0].levels.medium == id ? "Medio" : "Básico";
             l = res[0].levels.advanced == id ? "Avanzado" : l;
             l = res[0].value+"/"+l
         let us 
@@ -259,8 +272,8 @@ class Home extends Component {
         }
     }
     submitForm(e, status){
-        let lack_skill = "Mapeo Conocimiento: Notificacion de falta de habilidad";
-        let unregistered = "Mapeo Conocimiento: Notificación para creación de usuario";
+        let lack_skill = "Mapeo Conocimientos: Notificación de falta de habilidad";
+        let unregistered = "Mapeo Conocimientos: Notificación para creación de usuario";
         e.preventDefault();
         let obj = this;
         if (status === 1){
@@ -282,6 +295,7 @@ class Home extends Component {
                 });
 
             }).catch((err) => {
+                obj.conn_err();
                 console.log(err)
             })
         } else if (status === 0) {
@@ -302,6 +316,7 @@ class Home extends Component {
                     }
                 });
             }).catch((err) => {
+                obj.conn_err();
                 console.log(err)
             })
         }
@@ -331,7 +346,7 @@ class Home extends Component {
           <div className="content">
           <h1 className="title">EVOLUCIONA JUNTO A LA TECNOLOGIA</h1>
           <div className="box">
-            <h1>Mapa de Conocimientos</h1>
+            <h2>Mapa de Conocimientos</h2>
             {this.state.defined === false &&
             <div>
                 <div className="row">
@@ -363,7 +378,7 @@ class Home extends Component {
                                  <i className="fa fa-info-circle"></i>
                                  <span className="message">
                                      <ul>
-                                         <li><strong>Basico:</strong> Has completado exitosamente cursos en línea o presenciales sobre la tecnología.</li>
+                                         <li><strong>Básico:</strong> Has completado exitosamente cursos en línea o presenciales sobre la tecnología.</li>
                                          <li><strong>Medio:</strong> Has acumulado al menos seis meses de experiencia total en la tecnología a través de la culminación exitosa de solicitudes.</li>
                                          <li><strong>Avanzado:</strong> Has acumulado más de seis meses de experiencia total en la tecnología a través de la culminación exitosa de solicitudes.</li>
                                      </ul>
@@ -372,8 +387,8 @@ class Home extends Component {
 
                          {renderskills}
                          <div>
-                             {this.state.currentPage == 1 && <button disabled className="btn btn-secondary">Atras</button>}
-                             {this.state.currentPage > 1 && <button onClick={this.btnPrevClick} className="btn btn-secondary">Atras</button>}
+                             {this.state.currentPage == 1 && <button disabled className="btn btn-secondary">Atrás</button>}
+                             {this.state.currentPage > 1 && <button onClick={this.btnPrevClick} className="btn btn-secondary">Atrás</button>}
                              {this.state.custom_skills.length/skillsPerPage > this.state.currentPage && <button onClick={this.btnNextClick} className="btn btn-info ml-3">Siguiente</button>}
                              {!(this.state.custom_skills.length/skillsPerPage > this.state.currentPage) && <button className="btn btn-info ml-3" disabled>Siguiente</button>}
                          </div>
@@ -389,7 +404,7 @@ class Home extends Component {
                                      <th scope="col">#</th>
                                      <th scope="col">Habilidad</th>
                                      <th scope="col">Nivel</th>
-                                     <th scope="col">Opcion</th>
+                                     <th scope="col">Opción</th>
                                  </tr>
                                  </thead>
                                  <tbody>
@@ -406,7 +421,7 @@ class Home extends Component {
                                  </tbody>
                              </table>
                              {this.state.userSkill.filter(item => item.name =="Skills").length == 0 &&
-                                 <h5>No posee skills registradas actualmente</h5>}
+                                 <h5>No posee habilidades registradas actualmente</h5>}
                          </div>
                          <button onClick={this.updateSkills} className="btn btn-primary">Guardar</button>
                          <hr/>
@@ -419,7 +434,7 @@ class Home extends Component {
                                      <strong>Primer Acceso al sitio:</strong> <small>{this.state.first_conn}</small>
                                  </li>
                                  <li className="list-group-item">
-                                     <strong>Ultimo Acesso al sitio:</strong> <small>{this.state.last_conn}</small>
+                                     <strong>Ultimo Acceso al sitio:</strong> <small>{this.state.last_conn}</small>
                                  </li>
 
                              </ul>
@@ -438,7 +453,7 @@ class Home extends Component {
                                  <div className="form-group">
                                      <label htmlFor="message">Mensaje</label>
                                      <textarea className="form-control" id="message" rows="3"
-                                               placeholder="Indicanos cual...!" value={this.state.message}
+                                               placeholder="Indícanos cual...!!" value={this.state.message}
                                      onChange={this.onChangeMessage} required={true}/>
                                  </div>
                                  <button type="submit" className="btn btn-primary">Enviar</button>

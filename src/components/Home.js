@@ -17,17 +17,17 @@ class Home extends Component {
                         <div className="row">
                             <div className="col">
                                 <div className="row">
-                                    <h1 className="welcome-header">Bienvenido a nuestra herramienta de mapeo de conocimiento </h1>
-                                    <NavLink exact to="/perfil"><button className="btn btn-dark welcome-header">Ver Perfil</button></NavLink>
+                                    <h1 className="welcome-header">Bienvenido a nuestra herramienta de mapeo de conocimientos </h1>
+                                    <NavLink exact to="/perfil"><button className="btn btn-dark welcome-header btn-perfil">Ver Perfil</button></NavLink>
                                 </div>
                                 <div className="row">
                                     <hr/></div>
                                 <div className="row">
-                                    <h3>Leyenda de habilidades</h3>
+                                    <h3>Leyenda de conocimientos</h3>
                                     <table className="table table">
                                         <thead>
                                         <tr>
-                                            <th scope="col">Nivel de Habilidad</th>
+                                            <th scope="col">Nivel</th>
                                             <th scope="col">Descripción</th>
                                         </tr>
                                         </thead>
