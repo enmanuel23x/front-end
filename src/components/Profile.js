@@ -200,8 +200,15 @@ class Home extends Component {
           }
 
           obj.setState({
-              defined:true,custom_skills: custom_skills
+              custom_skills: custom_skills
           });
+          if(obj.state.userSkill==null || obj.state.custom_skills==null){
+            obj.conn_err();
+          }else{
+            obj.setState({
+                defined: true
+            });
+          }
           //console.log(obj.state)
           // Levels and ids
         }).catch(function (error) {
