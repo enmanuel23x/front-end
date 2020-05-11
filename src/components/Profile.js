@@ -36,20 +36,21 @@ class Home extends Component {
         message: "",
         first_conn: "",
         last_conn: "",
-        last_conn_updated: ""
+        last_conn_updated: "",
+        err:0
 
     };
     this.updateSkills = this.updateSkills.bind(this);
     this.charge = this.charge.bind(this);
     this.loadSkills = this.loadSkills.bind(this);
-    this.charge();
     this.btnNextClick = this.btnNextClick.bind(this);
     this.btnPrevClick = this.btnPrevClick.bind(this);
     this.deleteUserSkill = this.deleteUserSkill.bind(this);
     this.addUserSkill = this.addUserSkill.bind(this);
     this.submitForm = this.submitForm.bind(this);
     this.onChangeMessage = this.onChangeMessage.bind(this);
-
+    this.conn_err = this.conn_err.bind(this);
+    this.charge();
     }
     updateSkills(){
         const obj =this;
@@ -246,12 +247,18 @@ class Home extends Component {
         this.setState({ currentPage : listid});
     }
     conn_err(){
-        Swal.fire({
-            icon: 'error',
-            title: 'Ocurrió un error al cargar el servicio!',
-            html: 'Por favor revise su conexión y reintente.<br>Si el problema persiste contacte con soporte.',
-            confirmButton:true
-        })
+        if(this.state.err >= 2){
+            this.setState({err:this.state.err+1})
+            this.charge();
+        }else{
+            Swal.fire({
+                icon: 'error',
+                title: 'Ocurrió un error al cargar el servicio!',
+                html: 'Por favor revise su conexión y reintente.<br>Si el problema persiste contacte con soporte.',
+                confirmButton:true
+            })
+        }
+        
     }
     deleteUserSkill(e){
         e.preventDefault();
