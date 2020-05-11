@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom'
+import keycloak from '../../config/keycloak';
 class Logout extends Component {
 
   logout() {
-    window.location.href="/"
-    localStorage.removeItem("email");
-    localStorage.removeItem("name");
+    this.props.history.push('/');
+    keycloak.logout();
   }
 
   render() {

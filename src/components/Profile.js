@@ -11,7 +11,7 @@ import categorias from '../config/skills.config';
 const axios = require('axios').default;
 axios.defaults.baseURL = config.backURL;
 const skillsPerPage = 1;
-
+import keycloak from "../config/keycloak"
 /* Write here the email address that will receive the messages  */
 const email = config.email;
 
@@ -21,8 +21,8 @@ class Home extends Component {
     super(props);
 
     this.state = {
-        email: localStorage.getItem("email"),
-        name: localStorage.getItem("name"),
+        email: keycloak.idTokenParsed.email,
+        name: keycloak.idTokenParsed.name,
         id: null,
         userSkill: null,
         skills: null,
@@ -71,7 +71,7 @@ class Home extends Component {
     charge(){
       let days = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
       let obj=this;
-      let email=localStorage.getItem("email");
+      let email=keycloak.idTokenParsed.email;
       axios.get('/rg/resources/ids').then(function (res1) {
           axios.post('/rg/resources/emails',{ids:res1.data}).then(function (res2) {
               let index = res2.data.reduce(function(acc, curr, index) { if (curr === email) {acc.push(index);}return acc;}, []);
@@ -97,7 +97,7 @@ class Home extends Component {
       });
 
       function getDate(){
-          axios.post('bd/data', {email: localStorage.getItem("email")})
+          axios.post('bd/data', {email: keycloak.idTokenParsed.email})
               .then((res) => {
            //       console.log(res.data)
                   let first_day = new Date(res.data[0].first_conn);
@@ -111,8 +111,8 @@ class Home extends Component {
                   obj.state.first_conn = first_connection;
                   obj.state.last_conn = last_connection;
                   // console.log("previa: ", obj.state.last_conn);
-                  axios.post('bd/update', {email: localStorage.getItem("email"), create: false}).then(response => {
-                      axios.post('bd/data', {email: localStorage.getItem("email")}).then(res2 => {
+                  axios.post('bd/update', {email: keycloak.idTokenParsed.email, create: false}).then(response => {
+                      axios.post('bd/data', {email: keycloak.idTokenParsed.email}).then(res2 => {
                           obj.state.last_conn_updated = timeZoneConverter(res2.data[0].last_conn, 0, -4, 'YYYY/MM/DD HH:mm:ss');
                           // console.log("actual: ", obj.state.last_conn_updated)
                       })
@@ -120,10 +120,10 @@ class Home extends Component {
               })
       }
 
-      axios.post('bd/data', {email: localStorage.getItem("email")})
+      axios.post('bd/data', {email: keycloak.idTokenParsed.email})
           .then((res) => {
               if (res.data.length === 0){
-                  axios.post('bd/update', {email: localStorage.getItem("email"), create: true})
+                  axios.post('bd/update', {email: keycloak.idTokenParsed.email, create: true})
                       .then(res => {
                           //console.log("ok", res)
                       }).then(()=> {
@@ -286,7 +286,7 @@ class Home extends Component {
         if (status === 1){
             axios.post('/email/send', {"email": email, "subject": lack_skill,
                 // eslint-disable-next-line no-useless-concat
-                "text":"Colaborador: "+ localStorage.getItem("name") +'\n' + "Correo: " + localStorage.getItem("email") + '\n' + "Mensaje: " + obj.state.message}).then((res) =>{
+                "text":"Colaborador: "+ keycloak.idTokenParsed.name +'\n' + "Correo: " + keycloak.idTokenParsed.email + '\n' + "Mensaje: " + obj.state.message}).then((res) =>{
                 Swal.fire({
                     icon: 'success',
                     title: 'Mensaje enviado!',
@@ -308,7 +308,7 @@ class Home extends Component {
         } else if (status === 0) {
             axios.post('/email/send', {"email": email, "subject": unregistered,
                 // eslint-disable-next-line no-useless-concat
-                "text":"Colaborador: "+ localStorage.getItem("name") +'\n' + "Correo: " + localStorage.getItem("email") + '\n' + "Mensaje: " + obj.state.message}).then((res) =>{
+                "text":"Colaborador: "+ keycloak.idTokenParsed.name +'\n' + "Correo: " + keycloak.idTokenParsed.email + '\n' + "Mensaje: " + obj.state.message}).then((res) =>{
                 Swal.fire({
                     icon: 'success',
                     title: 'Mensaje enviado!',

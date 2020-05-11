@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom'
 import LogOut from './LogOut';
-
+import keycloak from "../../config/keycloak" 
 class Navigation extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: localStorage.getItem("name")
+            name: keycloak.idTokenParsed.name
         }
     }
 
