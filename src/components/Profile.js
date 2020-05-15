@@ -19,7 +19,7 @@ const email = config.email;
 class Home extends Component {
   constructor(props) {
     super(props);
-
+    console.log(keycloak)
     this.state = {
         email: keycloak.idTokenParsed.email,
         name: keycloak.idTokenParsed.name,
@@ -203,7 +203,7 @@ class Home extends Component {
           obj.setState({
               custom_skills: custom_skills
           });
-          if(obj.state.userSkill==null || obj.state.custom_skills==null){
+          if(res.data.selected_custom_field_options==null || custom_skills==null){
             obj.conn_err();
           }else{
             obj.setState({
