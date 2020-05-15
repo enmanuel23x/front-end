@@ -203,9 +203,7 @@ class Home extends Component {
           obj.setState({
               custom_skills: custom_skills
           });
-          if(res.data.selected_custom_field_options==null || custom_skills==null){
-            obj.conn_err();
-          }else{
+          if(!(res.data.selected_custom_field_options==null || custom_skills==null)){
             obj.setState({
                 defined: true
             });
