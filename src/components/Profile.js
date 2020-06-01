@@ -19,7 +19,6 @@ const email = config.email;
 class Home extends Component {
   constructor(props) {
     super(props);
-    console.log(keycloak)
     this.state = {
         email: keycloak.idTokenParsed.email,
         name: keycloak.idTokenParsed.name,
@@ -138,6 +137,7 @@ class Home extends Component {
     loadSkills(id){
       let obj=this;
       axios.get('/rg/skills').then(function (skills) {
+        console.log(skills.data)
         axios.get('/rg/resource/'+id).then(function (res) {
           if(res.data.selected_custom_field_options.length !== 0){
               obj.setState({email:res.data.email,
@@ -180,26 +180,30 @@ class Home extends Component {
               values.push(custom_fields[i].split("/")[0])
           }
           values = values.filter((v, i, a) => a.indexOf(v) === i);
-
-          let j = 0;
+          
           let prev="",index=0;
+          
+          for (let i = 0; i < values.length; i++) {
+          values[i] = [values[i],categories[i*3],[custom_levels[i*3],custom_levels[(i*3)+2],custom_levels[(i*3)+1]]]
+          }
+          values = values.sort( (a, b) => a[1].localeCompare(b[1]) )
           for (let i = 0; i < values.length; i++) {
             if(prev==""){
-                fields.push([{"value": values[i], "levels": {"advanced": custom_levels[j], "medium": custom_levels[j+2], "basic": custom_levels[j+1]}}]);
-              }else if(prev==categories[i*3]){
-                fields[index].push({"value": values[i], "levels": {"advanced": custom_levels[j], "medium": custom_levels[j+2], "basic": custom_levels[j+1]} });
+                fields.push([{"value": values[i][0], "levels": {"advanced": values[i][2][0], "medium": values[i][2][2], "basic": values[i][2][1]}}]);
+              }else if(prev==values[i][1]){
+                fields[index].push({"value": values[i][0], "levels": {"advanced": values[i][2][0], "medium": values[i][2][2], "basic": values[i][2][1]} });
               }else{
                 index++;
-                fields.push([{"value": values[i], "levels": {"advanced": custom_levels[j], "medium": custom_levels[j+2], "basic": custom_levels[j+1]}}]);
+                fields.push([{"value": values[i][0], "levels": {"advanced": values[i][2][0], "medium": values[i][2][2], "basic": values[i][2][1]}}]);
               }
-              j += 3;
-              prev=categories[i*3];
+              prev=values[i][1];
           }
+
           categories = categories.filter((v, i, a) => a.indexOf(v) === i);
+          
           for (let i = 0; i < categories.length; i++) {
               custom_skills.push({"title": categories[i], "fields": fields[i]})
           }
-
           obj.setState({
               custom_skills: custom_skills
           });
