@@ -180,7 +180,6 @@ class Home extends Component {
               values.push(custom_fields[i].split("/")[0])
           }
           values = values.filter((v, i, a) => a.indexOf(v) === i);
-          
           let prev="",index=0;
           
           for (let i = 0; i < values.length; i++) {
@@ -200,9 +199,16 @@ class Home extends Component {
           }
 
           categories = categories.filter((v, i, a) => a.indexOf(v) === i);
-          
+          categories = categories.sort( (a, b) => a.localeCompare(b) )
+          prev = "";let j=0;
           for (let i = 0; i < categories.length; i++) {
-              custom_skills.push({"title": categories[i], "fields": fields[i]})
+              if(prev != categories[i]){
+                custom_skills.push({"title": categories[i], "fields": fields[i]})
+                j=i;
+              }else{
+                custom_skills[j] = {"title": categories[i], "fields": [...custom_fields[j].fields,fields[i]]}
+              }
+              prev = categories[i]
           }
           obj.setState({
               custom_skills: custom_skills
