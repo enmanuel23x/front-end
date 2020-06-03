@@ -366,9 +366,9 @@ class Home extends Component {
         <div className="home">
           <Navigation/>
           <div className="content">
-          <h1 className="title">EVOLUCIONA JUNTO A LA TECNOLOGIA</h1>
+          <h1 className="title">EVOLUCIONA JUNTO A LA TECNOLOGÍA</h1>
           <div className="box">
-            <h2>Mapa de Conocimientos</h2>
+            <h2>Registro de Conocimientos</h2>
             {this.state.defined === false &&
             <div>
                 <div className="row">
@@ -414,6 +414,22 @@ class Home extends Component {
                              {this.state.custom_skills.length/skillsPerPage > this.state.currentPage && <button onClick={this.btnNextClick} className="btn btn-info ml-3">Siguiente</button>}
                              {!(this.state.custom_skills.length/skillsPerPage > this.state.currentPage) && <button className="btn btn-info ml-3" disabled>Siguiente</button>}
                          </div>
+                         <hr/>
+                         {/*Actividad de usuario*/}
+                         <div className="card mt-3 mb-3">
+                             <div className="card-header">
+                                 <strong>Actividad de acceso</strong>
+                             </div>
+                             <ul className="list-group list-group-flush">
+                                 <li className="list-group-item">
+                                     <strong>Primer Acceso al sitio:</strong> <small>{this.state.first_conn}</small>
+                                 </li>
+                                 <li className="list-group-item">
+                                     <strong>Último Acceso al sitio:</strong> <small>{this.state.last_conn}</small>
+                                 </li>
+
+                             </ul>
+                         </div>
                      </div>
                      <div className="hr-vertical"></div>
                      <div className="col pt-4">
@@ -424,9 +440,9 @@ class Home extends Component {
                                  <thead>
                                  <tr>
                                      <th scope="col">#</th>
-                                     <th scope="col">Habilidad</th>
+                                     <th scope="col">Conocimiento</th>
                                      <th scope="col">Nivel</th>
-                                     <th scope="col">Opción</th>
+                                     <th scope="col">Acción</th>
                                  </tr>
                                  </thead>
                                  <tbody>
@@ -445,44 +461,30 @@ class Home extends Component {
                              {this.state.userSkill.filter(item => item.name =="Skills").length == 0 &&
                                  <h5>No posee habilidades registradas actualmente</h5>}
                          </div>
-                         <button onClick={this.updateSkills} className="btn btn-primary">Guardar</button>
+                         <button onClick={this.updateSkills} className="btn btn-info mb-2">Guardar</button>
+                         {/*Ausencia de conocimiento*/}
                          <hr/>
-                         <div className="card mt-3 mb-3">
-                             <div className="card-header">
-                                 <strong>Actividad de acceso</strong>
+                         <div className="row">
+                             <div className="col">
+                                 <div className="container">
+                                     <form onSubmit={(e) => {
+                                         this.submitForm(e, 1)
+                                     }}>
+                                         <h4 className="mb-3">¿Posees un conocimiento y no lo ves en la lista?</h4>
+                                         <div className="form-group">
+                                             <label htmlFor="message">Mensaje</label>
+                                             <textarea className="form-control" id="message" rows="3"
+                                                       placeholder="¡Indícanos cuál...!" value={this.state.message}
+                                                       onChange={this.onChangeMessage} required={true}/>
+                                         </div>
+                                         <button type="submit" className="btn btn-info">Enviar</button>
+                                     </form>
+                                 </div>
                              </div>
-                             <ul className="list-group list-group-flush">
-                                 <li className="list-group-item">
-                                     <strong>Primer Acceso al sitio:</strong> <small>{this.state.first_conn}</small>
-                                 </li>
-                                 <li className="list-group-item">
-                                     <strong>Ultimo Acceso al sitio:</strong> <small>{this.state.last_conn}</small>
-                                 </li>
-
-                             </ul>
                          </div>
-
                      </div>
                  </div>
                  <hr/>
-                 <div className="row">
-                     <div className="col">
-                         <div className="container">
-                             <form onSubmit={(e) => {
-                                 this.submitForm(e, 1)
-                             }}>
-                                 <h4 className="mt-5 mb-3">¿Posees un conocimiento y no lo ves en la lista?</h4>
-                                 <div className="form-group">
-                                     <label htmlFor="message">Mensaje</label>
-                                     <textarea className="form-control" id="message" rows="3"
-                                               placeholder="¡Indícanos cuál...!" value={this.state.message}
-                                     onChange={this.onChangeMessage} required={true}/>
-                                 </div>
-                                 <button type="submit" className="btn btn-primary">Enviar</button>
-                             </form>
-                         </div>
-                     </div>
-                 </div>
              </div>
              }
             {this.state.defined === null &&

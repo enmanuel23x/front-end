@@ -186,7 +186,7 @@ class Pagination extends Component {
           <table className="table table-striped">
                         <thead>
                         <tr>
-                            <th scope="col">Habilidad</th>
+                            <th scope="col">Conocimiento</th>
                             <th scope="col">Nivel</th>
                             <th scope="col">Acción</th>
                         </tr>

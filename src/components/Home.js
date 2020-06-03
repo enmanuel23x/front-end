@@ -12,18 +12,18 @@ class Home extends Component {
             <div className="home">
                 <Navigation/>
                 <div className="content">
-                    <h1 className="title">EVOLUCIONA JUNTO A LA TECNOLOGIA</h1>
+                    <h1 className="title">EVOLUCIONA JUNTO A LA TECNOLOGÍA</h1>
                     <div className="box">
                         <div className="row">
                             <div className="col">
                                 <div className="row">
-                                    <h1 className="welcome-header">Bienvenido(a) a nuestra herramienta de mapeo de conocimientos </h1>
+                                    <h1 className="welcome-header">Bienvenido(a) a nuestra herramienta de registro de conocimientos</h1>
                                     <NavLink exact to="/perfil"><button className="btn btn-info welcome-header">Ver Perfil</button></NavLink>
                                 </div>
                                 <div className="row">
                                     <hr/></div>
                                 <div className="row">
-                                    <h3>Leyenda de conocimientos</h3>
+                                    <h3>Leyenda de niveles de conocimientos</h3>
                                     <table className="table table">
                                         <thead>
                                         <tr>
