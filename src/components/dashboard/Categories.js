@@ -1,91 +1,72 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
-import './assets/css/skills.css';
-import { Table } from 'antd';
-// import { Resizable } from 'react-resizable';
+import {Button, Space, Table} from 'antd';
 
+const columns = [
+    {
+        title: 'Nombre',
+        dataIndex: 'name',
+        render: text => <a>{text}</a>,
+    },
+    {
+        title: 'Descripcion',
+        className: 'column-money',
+        dataIndex: 'money',
+        align: 'right',
+    },
+    {
+        title: 'Operación',
+        key: 'action',
+        width: "20%",
+        render: (text, record) => (
+            <Space size="small">
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                <a>Eliminar</a>
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                <a>Editar</a>
+            </Space>
+        ),
+    },
+];
 
+const data = [
+    {
+        key: '1',
+        name: 'John Brown',
+        money: '￥300,000.00',
+    },
+    {
+        key: '2',
+        name: 'Jim Green',
+        money: '￥1,256,000.00',
+    },
+    {
+        key: '3',
+        name: 'Joe Black',
+        money: '￥120,000.00',
+    },
+];
 
-class Categories extends React.Component {
-    state = {
-        columns: [
-            {
-                title: 'Date',
-                dataIndex: 'date',
-                width: 200,
-            },
-            {
-                title: 'Amount',
-                dataIndex: 'amount',
-                width: 100,
-                sorter: (a, b) => a.amount - b.amount,
-            },
-            {
-                title: 'Type',
-                dataIndex: 'type',
-                width: 100,
-            },
-            {
-                title: 'Note',
-                dataIndex: 'note',
-                width: 100,
-            },
-            {
-                title: 'Action',
-                key: 'action',
-                render: () => <a>Delete</a>,
-            },
-        ],
-    };
+const Categories = () => {
+    return (
+        <div>
+            <Button
+                // onClick={}
+                type="primary"
+                style={{
+                    marginBottom: 16,
+                }}
+            >
+                Agregar Nueva Categoria
+            </Button>
+            <Table
+                columns={columns}
+                dataSource={data}
+                bordered
+            />
+        </div>
 
-
-    data = [
-        {
-            key: 0,
-            date: '2018-02-11',
-            amount: 120,
-            type: 'income',
-            note: 'transfer',
-        },
-        {
-            key: 1,
-            date: '2018-03-11',
-            amount: 243,
-            type: 'income',
-            note: 'transfer',
-        },
-        {
-            key: 2,
-            date: '2018-04-11',
-            amount: 98,
-            type: 'income',
-            note: 'transfer',
-        },
-    ];
-
-    handleResize = index => (e, { size }) => {
-        this.setState(({ columns }) => {
-            const nextColumns = [...columns];
-            nextColumns[index] = {
-                ...nextColumns[index],
-                width: size.width,
-            };
-            return { columns: nextColumns };
-        });
-    };
-
-    render() {
-        const columns = this.state.columns.map((col, index) => ({
-            ...col,
-            onHeaderCell: column => ({
-                width: column.width,
-                onResize: this.handleResize(index),
-            }),
-        }));
-
-        return <Table bordered components={this.components} columns={columns} dataSource={this.data} />;
-    }
-}
+    )
+};
 
 export default Categories

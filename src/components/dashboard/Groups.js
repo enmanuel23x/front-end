@@ -1,91 +1,82 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
-import './assets/css/skills.css';
-import { Table } from 'antd';
-// import { Resizable } from 'react-resizable';
+import {Button, Space, Table} from 'antd';
 
+const columns = [
+    {
+        title: 'Gerencia',
+        dataIndex: 'name',
+        width: "15%"
+    },
+    {
+        title: 'Descripción',
+        dataIndex: 'description',
+        align: 'right',
+        width: "65%"
+    },
+    {
+        title: 'Operación',
+        key: 'action',
+        width: "20%",
+        render: (text, record) => (
+            <Space size="small">
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                <a>Eliminar</a>
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                <a>Editar</a>
+            </Space>
+        ),
+    },
+];
 
+const data = [
+    {
+        key: '1',
+        name: 'Aplicaciones',
+        description: '...',
+    },
+    {
+        key: '2',
+        name: 'Operaciones',
+        description: '...',
+    },
 
-class Groups extends React.Component {
-    state = {
-        columns: [
-            {
-                title: 'Date',
-                dataIndex: 'date',
-                width: 200,
-            },
-            {
-                title: 'Amount',
-                dataIndex: 'amount',
-                width: 100,
-                sorter: (a, b) => a.amount - b.amount,
-            },
-            {
-                title: 'Type',
-                dataIndex: 'type',
-                width: 100,
-            },
-            {
-                title: 'Note',
-                dataIndex: 'note',
-                width: 100,
-            },
-            {
-                title: 'Action',
-                key: 'action',
-                render: () => <a>Delete</a>,
-            },
-        ],
-    };
+];
+//
+// const rowSelection = {
+//     onChange: (selectedRowKeys, selectedRows) => {
+//         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+//     },
+//     onSelect: (record, selected, selectedRows) => {
+//         console.log(record, selected, selectedRows);
+//     },
+//     onSelectAll: (selected, selectedRows, changeRows) => {
+//         console.log(selected, selectedRows, changeRows);
+//     },
+// };
 
+const Groups = () => {
+    return (
+        <div>
+            <Button
+                // onClick={}
+                type="primary"
+                style={{
+                    marginBottom: 16,
+                }}
+            >
+                Agregar nuevo grupo
+            </Button>
+            <Table
+                columns={columns}
+                dataSource={data}
+                // rowSelection={rowSelection}
+                bordered
+                title={() => 'Grupos de Gerencia'}
+            />
+        </div>
 
-    data = [
-        {
-            key: 0,
-            date: '2018-02-11',
-            amount: 120,
-            type: 'income',
-            note: 'transfer',
-        },
-        {
-            key: 1,
-            date: '2018-03-11',
-            amount: 243,
-            type: 'income',
-            note: 'transfer',
-        },
-        {
-            key: 2,
-            date: '2018-04-11',
-            amount: 98,
-            type: 'income',
-            note: 'transfer',
-        },
-    ];
-
-    handleResize = index => (e, { size }) => {
-        this.setState(({ columns }) => {
-            const nextColumns = [...columns];
-            nextColumns[index] = {
-                ...nextColumns[index],
-                width: size.width,
-            };
-            return { columns: nextColumns };
-        });
-    };
-
-    render() {
-        const columns = this.state.columns.map((col, index) => ({
-            ...col,
-            onHeaderCell: column => ({
-                width: column.width,
-                onResize: this.handleResize(index),
-            }),
-        }));
-
-        return <Table bordered components={this.components} columns={columns} dataSource={this.data} />;
-    }
-}
+    )
+};
 
 export default Groups
