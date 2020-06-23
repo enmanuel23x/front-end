@@ -41,6 +41,32 @@ const Skills = () => {
         fillTable()
     }, [])
 
+    const columns = [
+        {
+            title: 'Conocimiento',
+            dataIndex: 'name',
+            key: 'name',
+        },
+        {
+            title: 'Categoria',
+            dataIndex: 'category',
+            key: 'category',
+        },
+        {
+            title: 'Operación',
+            key: 'action',
+            width: "20%",
+            render: (text, record) => (
+                <Space size="middle">
+                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                    <a onClick={() => deleteRecord(record.id,record.name)}>Eliminar</a>
+                    <a onClick={() => updateSkill(record.id,record.name, record.category)}>Editar</a>
+
+                </Space>
+            ),
+        },
+    ];
+
     function deleteRecord(id, name){
         Swal.fire({
             title: "¿Quieres eliminar la habilidad "+name+"?",
@@ -135,31 +161,77 @@ const Skills = () => {
             }
         })
     }
-    const columns = [
-        {
-            title: 'Conocimiento',
-            dataIndex: 'name',
-            key: 'name',
-        },
-        {
-            title: 'Categoria',
-            dataIndex: 'category',
-            key: 'category',
-        },
-        {
-            title: 'Operación',
-            key: 'action',
-            width: "20%",
-            render: (text, record) => (
-                <Space size="middle">
-                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                    <a onClick={() => deleteRecord(record.id,record.name)}>Eliminar</a>
-                    <a>Editar</a>
 
-                </Space>
-            ),
-        },
-    ];
+
+    function updateSkill(id, name, category) {
+        let skills = {}
+        axios.get('/resource/categories')
+            .then(async function (response) {
+                // handle success
+                for (let i = 0; i <  response.data.length; i++) {
+                    skills[response.data[i].id] = response.data[i].name
+                }
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .then(function () {
+                console.log("Skills fetched")
+                // always executed
+            });
+
+
+
+        Swal.mixin({
+            input: 'text',
+            confirmButtonText: 'Siguiente &rarr;',
+            cancelButtonText: 'Cancelar',
+
+            showCancelButton: true,
+            progressSteps: ['1', '2']
+        }).queue([
+            {
+                title: 'Conocimiento',
+                text: 'Ingrese la habilidad asociada',
+                inputValue: name
+            },
+            {
+                title: 'Categoria',
+                text: 'Elija la Categoria',
+                input: 'select',
+                inputOptions: skills,
+                inputValue: category
+            },
+        ]).then((result) => {
+            if (result.value) {
+                const answers = (result.value)
+
+                axios.post('resource/skills', {
+                    id: id,
+                    name: answers[0],
+                    category_id: parseInt(answers[1])
+                })
+                    .then(response => {
+                        // console.log(response);
+                        fillTable()
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Conocimiento actualizado',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+
+            }
+        })
+    }
+
+
 
     return (
         <div>

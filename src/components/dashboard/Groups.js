@@ -64,7 +64,7 @@ const Groups = () => {
                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                     <a onClick={() => deleteRecord(record.id,record.name)}>Eliminar</a>
                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                    <a>Editar</a>
+                    <a onClick={() => updateGroup(record.id, record.name, record.description)}>Editar</a>
                 </Space>
             ),
         },
@@ -84,7 +84,7 @@ const Groups = () => {
                 if (willDelete.value) {
                     axios.delete('resource/groups/'+id)
                         .then( function (response) {
-                            if(response.data == "ERROR"){
+                            if(response.data === "ERROR"){
                                 Swal.fire({
                                     title:"El grupo no puede ser eliminado!",
                                     text: "Por favor, verifique que el grupo no este en\n"+
@@ -139,6 +139,51 @@ const Groups = () => {
                     position: 'top-end',
                     icon: 'success',
                     title: 'Nueva Gerencia Añadida',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+
+            }
+        })
+    }
+
+    function updateGroup(id, name, description) {
+        Swal.mixin({
+            input: 'text',
+            confirmButtonText: 'Siguiente &rarr;',
+            cancelButtonText: 'Cancelar',
+            showCancelButton: true,
+            progressSteps: ['1', '2']
+        }).queue([
+            {
+                title: 'Gerencia',
+                text: 'Ingrese la gerencia asociada',
+                inputValue: name
+            },
+            {
+                title: 'Descripción',
+                text: 'Breve descripción',
+                inputValue: description
+            },
+        ]).then((result) => {
+            if (result.value) {
+                const answers = (result.value)
+                axios.post('resource/groups', {
+                    id: id,
+                    name: answers[0],
+                    description: answers[1]
+                })
+                    .then(response => {
+                        // console.log(response);
+                        fillTable()
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Gerencia Actualizada',
                     showConfirmButton: false,
                     timer: 1500
                 })
