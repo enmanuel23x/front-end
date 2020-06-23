@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import 'antd/dist/antd.css';
 import {Button, Space, Table} from 'antd';
+import Swal from "sweetalert2";
 const axios = require('axios').default;
 
 const columns = [
@@ -56,22 +57,64 @@ async function getData() {
 const Groups = () => {
     const [data, setData] = useState([]);
 
+    async function fillTable(){
+        let info = await getData()
+        console.log(info)
+        setData(info)
+    }
     useEffect(() => {
-        async function fillTable(){
-            let info = await getData()
-            console.log(info)
-            setData(info)
-        }
+
         fillTable()
 
 
     }, [])
 
+    async function createGroup(){
+        Swal.mixin({
+            input: 'text',
+            confirmButtonText: 'Siguiente &rarr;',
+            cancelButtonText: 'Cancelar',
 
+            showCancelButton: true,
+            progressSteps: ['1', '2']
+        }).queue([
+            {
+                title: 'Gerencia',
+                text: 'Ingrese la gerencia asociada'
+            },
+            {
+                title: 'Descripción',
+                text: 'Breve descripción',
+            },
+        ]).then((result) => {
+            if (result.value) {
+                const answers = (result.value)
+                axios.put('resource/groups', {
+                    name: answers[0],
+                    description: answers[1]
+                })
+                    .then(response => {
+                        // console.log(response);
+                        fillTable()
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Nueva Gerencia Añadida',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+
+            }
+        })
+    }
     return (
         <div>
             <Button
-                // onClick={}
+                onClick={createGroup}
                 type="primary"
                 style={{
                     marginBottom: 16,

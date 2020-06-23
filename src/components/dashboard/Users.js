@@ -104,10 +104,80 @@ const Users = () =>  {
             });
     }
 
+    async function createUsers(){
+        let groups = {}
+        await axios.get('/resource/groups')
+            .then(async function (response) {
+                // handle success
+                for (let i = 0; i <  response.data.length; i++) {
+                    groups[response.data[i].id] = response.data[i].name
+                }
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .then(function () {
+                console.log("Skills fetched")
+                // always executed
+            });
+
+
+
+        Swal.mixin({
+            input: 'text',
+            confirmButtonText: 'Siguiente &rarr;',
+            cancelButtonText: 'Cancelar',
+
+            showCancelButton: true,
+            progressSteps: ['1', '2', '3']
+        }).queue([
+            {
+                title: 'Nombre',
+                text: 'Ingrese nombre del colaborador'
+            },
+            {
+                title: 'Email',
+                text: 'Ingrese email corporativo'
+            },
+            {
+                title: 'Gerencia',
+                text: 'Elija el grupo asociado',
+                input: 'select',
+                inputOptions: groups
+            },
+        ]).then((result) => {
+            if (result.value) {
+                const answers = (result.value)
+                console.log(answers)
+                axios.put('resource/users', {
+                    email: answers[1],
+                    full_name: answers[0],
+                    group_id: parseInt(answers[2])
+                })
+                    .then(response => {
+                        // console.log(response);
+                        fillTable()
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Nuevo Conocimiento añadido',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+
+            }
+        })
+    }
 
     return(
         <div>
             <Button
+                onClick={createUsers}
                 type="primary"
                 style={{
                     marginBottom: 16,
