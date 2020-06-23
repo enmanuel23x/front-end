@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import 'antd/dist/antd.css';
 import {Button, Space, Table} from 'antd';
-import { data } from 'jquery';
 import Swal from 'sweetalert2';
 const axios = require('axios').default;
 

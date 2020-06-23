@@ -103,7 +103,7 @@ const Categories = () => {
                 if (willDelete.value) {
                     axios.delete('resource/categories/'+id)
                         .then( function (response) {
-                            if(response.data == "ERROR"){
+                            if(response.data === "ERROR"){
                                 Swal.fire({
                                     title:"La categoria no puede ser eliminado!",
                                     text: "Por favor, verifique que la categoria no este en\n"+

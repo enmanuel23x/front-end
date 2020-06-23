@@ -28,7 +28,6 @@ class Profile extends Component {
         defined: null,
         group: null,
         cat: null,
-        skills: null,
         currentPage: 1,
         upperPageBound: 3,
         lowerPageBound: 0,
