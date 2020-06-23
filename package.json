@@ -19,7 +19,7 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
     "reactstrap": "^8.4.1",
-    "sweetalert2": "^9.10.6",
+    "sweetalert2": "^9.15.1",
     "sweetalert2-react-content": "^3.0.1",
     "time-zone-converter": "^1.1.0"
   },
