@@ -29,15 +29,32 @@ async function getData() {
         });
     return categories
 }
-
+async function getData2() {
+    let groups = []
+    await axios.get('/resource/groups')
+        .then(async function (response) {
+            groups = await response.data;
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        })
+        .then(function () {
+            console.log("Data successfully fetched")
+            // always executed
+        });
+    return groups
+}
 
 const Categories = () => {
 
     const [data, setData] = useState([]);
+    const [groups, setGroups] = useState([]);
     async function fillTable(){
-        let info = await getData()
-        console.log(info)
+        const info = await getData()
         setData(info)
+        const info2 = await getData2()
+        setGroups(info2)
     }
     useEffect(() => {
         fillTable()
@@ -88,6 +105,38 @@ const Categories = () => {
             ),
         },
     ];
+    async function createCategorie(){
+        
+        const htmlChecks = await groups.map( (element) => '<p><input type="checkbox" name="'+element.id+'" id="'+element.id+'" checked="false" /><label for="'+element.id+'">'+element.name+'</label></p>').join(",");
+        const { value: formValues } = await Swal.fire({
+            title: 'Crear categoria',
+            html:
+                '<form id="create">'+
+              '<p><input type="text" name="t1" id="t1"><label for="t1">Name</label></p>' +
+              htmlChecks+
+              '<p><input type="text" name="t2" id="t2"><label for="t2">Description</label></p>'
+              +'</form>',
+            focusConfirm: false,
+            preConfirm: () => {
+                const data = document.getElementById("create").elements;
+                let result = []
+                for (let i=0;i<data.length;i++){
+                    if(i == 0 || i == (data.length-1)){
+                        result.push(data[i].value)
+                    }else{
+                        result.push(data[i].checked)
+                    }
+                }
+                return result;
+            }
+          })
+          
+          if (formValues) {
+            console.log(formValues);
+            //Valores del form ej: ["asfa", true, false, true, "564"]
+            //Por ahora primero ultimo no son checks
+          }
+    }
     function deleteRecord(id, name){
         Swal.fire({
             title: "¿Quieres eliminar la categoria "+name+"?",
@@ -103,7 +152,7 @@ const Categories = () => {
                 if (willDelete.value) {
                     axios.delete('resource/categories/'+id)
                         .then( function (response) {
-                            if(response.data === "ERROR"){
+                            if(response.data == "ERROR"){
                                 Swal.fire({
                                     title:"La categoria no puede ser eliminado!",
                                     text: "Por favor, verifique que la categoria no este en\n"+
@@ -126,7 +175,7 @@ const Categories = () => {
     return (
         <div>
             <Button
-                // onClick={}
+                onClick={createCategorie}
                 type="primary"
                 style={{
                     marginBottom: 16,
