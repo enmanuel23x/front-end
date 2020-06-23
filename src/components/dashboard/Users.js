@@ -1,7 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import 'antd/dist/antd.css';
-import {Button, Space, Table} from 'antd';
+import {Button, Space, Table, Divider} from 'antd';
 import Swal from 'sweetalert2';
+
+import {
+    DeleteFilled,
+    EditFilled,
+    PlusOutlined
+} from '@ant-design/icons';
 const axios = require('axios').default;
 
 
@@ -62,12 +68,15 @@ const Users = () =>  {
         {
             title: 'Operación',
             key: 'action',
+            width: "5%",
+            align: 'center',
             render: (text, record) => (
                 <Space size="small">
                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                    <a onClick={() => deleteRecord(record.id,record.name)}>Eliminar</a>
+                    <a onClick={() => deleteRecord(record.id,record.name)}><DeleteFilled /></a>
                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                    <a onClick={() => updateUsers(record.id, record.name, record.email, record.group, record.skills)}>Editar</a>
+                    <a onClick={() => updateUsers(record.id, record.name, record.email, record.group, record.skills)}><EditFilled /></a>
+
                 </Space>
             ),
         },
@@ -252,13 +261,11 @@ const Users = () =>  {
             <Button
                 onClick={createUsers}
                 type="primary"
-                style={{
-                    marginBottom: 16,
-                }}
+                style={{ backgroundColor: "#08979c", borderColor: "#08979c" }}
             >
-                Agregar Usuario Nuevo
+                Agregar Usuario Nuevo <PlusOutlined />
             </Button>
-
+    <Divider/>
             <Table
                 columns={columns}
                 dataSource={data}

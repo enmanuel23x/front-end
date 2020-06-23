@@ -1,7 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import 'antd/dist/antd.css';
-import {Table, Space, Button} from 'antd';
+import {Table, Space, Button, Divider} from 'antd';
 import Swal from 'sweetalert2'
+import {
+    DeleteFilled,
+    EditFilled,
+    PlusOutlined
+} from '@ant-design/icons';
 const axios = require('axios').default;
 
 
@@ -55,12 +60,13 @@ const Skills = () => {
         {
             title: 'Operación',
             key: 'action',
-            width: "20%",
+            width: "5%",
+            align: 'center',
             render: (text, record) => (
                 <Space size="middle">
                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                    <a onClick={() => deleteRecord(record.id,record.name)}>Eliminar</a>
-                    <a onClick={() => updateSkill(record.id,record.name, record.category)}>Editar</a>
+                    <a onClick={() => deleteRecord(record.id,record.name)}><DeleteFilled/></a>
+                    <a onClick={() => updateSkill(record.id,record.name, record.category)}><EditFilled/></a>
 
                 </Space>
             ),
@@ -238,12 +244,11 @@ const Skills = () => {
             <Button
                 onClick={createSkill}
                 type="primary"
-                style={{
-                    marginBottom: 16,
-                }}
+                style={{ backgroundColor: "#08979c", borderColor: "#08979c" }}
             >
-                Agregar nuevo conocimiento
+                Agregar nuevo conocimiento <PlusOutlined/>
             </Button>
+            <Divider/>
             <Table
                 columns={columns}
                 dataSource={data}

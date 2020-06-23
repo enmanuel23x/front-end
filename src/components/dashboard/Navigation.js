@@ -4,6 +4,7 @@ import 'antd/dist/antd.css';
 import './assets/css/navigation.css';
 
 
+
 // Components
 import UsersTable from "./Users";
 import Skills from "./Skills";
@@ -38,19 +39,19 @@ class SiderDemo extends React.Component {
                     <a href="/">                    <img src={require('./assets/img/logo.png')} style={{paddingTop: "20px", paddingLeft:"20px", paddingBottom:"20px"}} alt="logo" />
                     </a>
                     <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} >
-                        <Menu.Item key="1" icon={<UserOutlined />} onClick={() => this.setState({selected: 1})}>
+                        <Menu.Item key="1" icon={<UserOutlined />} onClick={() => this.setState({selected: 1})} className="customclass">
                             Usuarios
                         </Menu.Item>
-                        <Menu.Item key="4" icon={<AppstoreOutlined />} onClick={() => this.setState({selected: 4})}>
+                        <Menu.Item key="4" icon={<AppstoreOutlined />} onClick={() => this.setState({selected: 4})} className="customclass">
                             Grupos
                         </Menu.Item>
-                        <Menu.Item key="3" icon={<ApartmentOutlined />} onClick={() => this.setState({selected: 3})}>
+                        <Menu.Item key="3" icon={<ApartmentOutlined />} onClick={() => this.setState({selected: 3})} className="customclass">
                             Categorias
                         </Menu.Item>
-                        <Menu.Item key="2" icon={<BarChartOutlined />}  onClick={() => this.setState({selected: 2})}>
+                        <Menu.Item key="2" icon={<BarChartOutlined />}  onClick={() => this.setState({selected: 2})} className="customclass">
                             Habilidades
                         </Menu.Item>
-                        <Menu.Item key="5" icon={<LogoutOutlined />}>
+                        <Menu.Item key="5" icon={<LogoutOutlined />} className="customclass">
                             Salir
                         </Menu.Item>
                     </Menu>

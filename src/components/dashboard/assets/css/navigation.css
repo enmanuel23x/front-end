@@ -1,3 +1,7 @@
+@import '~antd/dist/antd.css';
+.ant-menu.ant-menu-dark .ant-menu-item-selected.customclass {
+    background-color: #08979c; /*Overriden property*/
+}
 .trigger {
     font-size: 18px;
     line-height: 64px;

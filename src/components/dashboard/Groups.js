@@ -1,7 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import 'antd/dist/antd.css';
-import {Button, Space, Table} from 'antd';
+import {Button, Space, Table, Divider} from 'antd';
 import Swal from "sweetalert2";
+import {
+    DeleteFilled,
+    EditFilled,
+    PlusOutlined
+} from '@ant-design/icons';
 const axios = require('axios').default;
 
 async function getData() {
@@ -47,7 +52,7 @@ const Groups = () => {
         {
             title: 'Gerencia',
             dataIndex: 'name',
-            width: "15%"
+            width: "40%"
         },
         {
             title: 'Descripción',
@@ -58,13 +63,14 @@ const Groups = () => {
         {
             title: 'Operación',
             key: 'action',
-            width: "20%",
+            width: "5%",
+            align: 'center',
             render: (text, record) => (
                 <Space size="small">
                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                    <a onClick={() => deleteRecord(record.id,record.name)}>Eliminar</a>
+                    <a onClick={() => deleteRecord(record.id,record.name)}><DeleteFilled/></a>
                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                    <a onClick={() => updateGroup(record.id, record.name, record.description)}>Editar</a>
+                    <a onClick={() => updateGroup(record.id, record.name, record.description)}><EditFilled/></a>
                 </Space>
             ),
         },
@@ -196,12 +202,11 @@ const Groups = () => {
             <Button
                 onClick={createGroup}
                 type="primary"
-                style={{
-                    marginBottom: 16,
-                }}
+                style={{ backgroundColor: "#08979c", borderColor: "#08979c" }}
             >
-                Agregar nuevo grupo
+                Agregar nuevo grupo <PlusOutlined/>
             </Button>
+            <Divider/>
             <Table
                 columns={columns}
                 dataSource={data}
