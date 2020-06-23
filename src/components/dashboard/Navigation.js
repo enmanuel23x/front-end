@@ -35,7 +35,8 @@ class SiderDemo extends React.Component {
         return (
             <Layout>
                 <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
-                    <img src={require('./assets/img/logo.png')} style={{paddingTop: "20px", paddingLeft:"20px", paddingBottom:"20px"}} alt="logo" />
+                    <a href="/">                    <img src={require('./assets/img/logo.png')} style={{paddingTop: "20px", paddingLeft:"20px", paddingBottom:"20px"}} alt="logo" />
+                    </a>
                     <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} >
                         <Menu.Item key="1" icon={<UserOutlined />} onClick={() => this.setState({selected: 1})}>
                             Usuarios

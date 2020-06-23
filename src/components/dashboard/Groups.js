@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import 'antd/dist/antd.css';
 import {Button, Space, Table} from 'antd';
 const axios = require('axios').default;
@@ -29,19 +29,13 @@ const columns = [
         ),
     },
 ];
-
-
-
-const Groups = () => {
-    const [data, setData] = useState([]);
-
+async function getData() {
     let groups = []
-    axios.get('/resource/groups')
-        .then(function (response) {
+    await axios.get('/resource/groups')
+        .then(async function (response) {
             // handle success
-            console.log(response.data);
             for (let i = 0; i <  response.data.length; i++) {
-                groups.push({
+                await groups.push({
                     name: response.data[i].name,
                     description: response.data[i].description,
                 })
@@ -49,12 +43,30 @@ const Groups = () => {
         })
         .catch(function (error) {
             // handle error
-            console.log(error);
+            // console.log(error);
         })
         .then(function () {
-            setData(groups)
+            console.log("Data successfully fetched")
             // always executed
         });
+    return groups;
+}
+
+
+const Groups = () => {
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        async function fillTable(){
+            let info = await getData()
+            console.log(info)
+            setData(info)
+        }
+        fillTable()
+
+
+    }, [])
+
 
     return (
         <div>

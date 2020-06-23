@@ -1,7 +1,6 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import 'antd/dist/antd.css';
 import {Button, Space, Table} from 'antd';
-import config from "../../config/config";
 const axios = require('axios').default;
 
 
@@ -35,16 +34,14 @@ const columns = [
 ];
 
 
-const Users = () => {
-    const [data, setData] = useState([]);
 
+async function getData() {
     let users = []
-    axios.get('/resource/tableUser')
-        .then(function (response) {
+    await axios.get('/resource/tableUser')
+        .then(async function (response) {
             // handle success
-            console.log(response.data);
             for (let i = 0; i <  response.data.length; i++) {
-                users.push({
+                await users.push({
                     name: response.data[i].full_name,
                     email: response.data[i].email,
                     group: response.data[i].group_id
@@ -56,32 +53,50 @@ const Users = () => {
             console.log(error);
         })
         .then(function () {
-            setData(users)
-            console.log(data)
             // always executed
+            console.log("Data successfully fetched")
+
         });
+    return users
+}
 
-    return (
-        <div>
-            <Button
-                // onClick={}
-                type="primary"
-                style={{
-                    marginBottom: 16,
-                }}
-            >
-                Agregar Usuario Nuevo
-            </Button>
-            <Table
-                columns={columns}
-                dataSource={data}
-                // rowSelection={rowSelection}
-                bordered
 
-            />
-        </div>
+const Users = () =>  {
+    const [data, setData] = useState([]);
 
-    )
+    useEffect(() => {
+        async function fillTable(){
+            let info = await getData()
+            console.log(info)
+            setData(info)
+        }
+        fillTable()
+
+
+    }, [])
+
+
+
+
+        return(
+            <div>
+                <Button
+                    type="primary"
+                    style={{
+                        marginBottom: 16,
+                    }}
+                >
+                    Agregar Usuario Nuevo
+                </Button>
+
+                <Table
+                    columns={columns}
+                    dataSource={data}
+                    bordered
+                />
+            </div>
+        )
+
 };
 
 export default Users

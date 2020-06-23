@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import 'antd/dist/antd.css';
 import {Table, Space, Button} from 'antd';
 const axios = require('axios').default;
@@ -27,19 +27,13 @@ const columns = [
     },
 ];
 
-
-
-
-const Skills = () => {
-    const [data, setData] = useState([]);
+async function getData() {
     let skills = []
-
-    axios.get('/resource/tableSkills')
-        .then(function (response) {
+    await axios.get('/resource/tableSkills')
+        .then(async function (response) {
             // handle success
-            console.log(response.data);
             for (let i = 0; i <  response.data.length; i++) {
-                skills.push({
+                await skills.push({
                     name: response.data[i].name,
                     category: response.data[i].category_id,
                 })
@@ -50,10 +44,26 @@ const Skills = () => {
             console.log(error);
         })
         .then(function () {
-            setData(skills)
+            console.log("Data successfully fetched")
             // always executed
         });
+    return skills
+}
 
+
+const Skills = () => {
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        async function fillTable(){
+            let info = await getData()
+            console.log(info)
+            setData(info)
+        }
+        fillTable()
+
+
+    }, [])
     return (
         <div>
             <Button

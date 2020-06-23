@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import 'antd/dist/antd.css';
 import {Button, Space, Table, Tag} from 'antd';
 const axios = require('axios').default;
@@ -49,19 +49,13 @@ const columns = [
         ),
     },
 ];
-
-
-const Categories = () => {
-
-    const [data, setData] = useState([]);
-
+async function getData() {
     let categories = []
-    axios.get('/resource/categories')
-        .then(function (response) {
+    await axios.get('/resource/categories')
+        .then(async function (response) {
             // handle success
-            console.log(response.data);
             for (let i = 0; i <  response.data.length; i++) {
-                categories.push({
+                await categories.push({
                     name: response.data[i].name,
                     description: response.data[i].description,
                     tags: Array.from(response.data[i].group_ids)
@@ -73,9 +67,27 @@ const Categories = () => {
             console.log(error);
         })
         .then(function () {
-            setData(categories)
+            console.log("Data successfully fetched")
             // always executed
         });
+    return categories
+}
+
+
+const Categories = () => {
+
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        async function fillTable(){
+            let info = await getData()
+            console.log(info)
+            setData(info)
+        }
+        fillTable()
+
+
+    }, [])
 
 
     return (
