@@ -16,7 +16,8 @@ async function getData() {
                     name: response.data[i].full_name,
                     email: response.data[i].email,
                     group: response.data[i].group_id,
-                    id: response.data[i].id
+                    id: response.data[i].id,
+                    skills: response.data[i].skills
                 })
             }
         })
@@ -67,7 +68,7 @@ const Users = () =>  {
                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                     <a onClick={() => deleteRecord(record.id,record.name)}>Eliminar</a>
                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                    <a>Editar</a>
+                    <a onClick={() => updateUsers(record.id, record.name, record.email, record.group, record.skills)}>Editar</a>
                 </Space>
             ),
         },
@@ -120,9 +121,6 @@ const Users = () =>  {
                 console.log("Skills fetched")
                 // always executed
             });
-
-
-
         Swal.mixin({
             input: 'text',
             confirmButtonText: 'Siguiente &rarr;',
@@ -164,7 +162,84 @@ const Users = () =>  {
                 Swal.fire({
                     position: 'top-end',
                     icon: 'success',
-                    title: 'Nuevo Conocimiento añadido',
+                    title: 'Nuevo Usuario añadido',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+
+            }
+        })
+
+
+
+
+    }
+
+    function updateUsers(id, name, email, group_id, skills){
+        console.log(id, name, email, group_id, skills)
+        let groups = {}
+        axios.get('/resource/groups')
+            .then(async function (response) {
+                // handle success
+                for (let i = 0; i <  response.data.length; i++) {
+                    groups[response.data[i].id] = response.data[i].name
+                }
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .then(function () {
+                console.log("Groups fetched")
+                // always executed
+            });
+        Swal.mixin({
+            input: 'text',
+            confirmButtonText: 'Siguiente &rarr;',
+            cancelButtonText: 'Cancelar',
+
+            showCancelButton: true,
+            progressSteps: ['1', '2', '3']
+        }).queue([
+            {
+                title: 'Nombre',
+                text: 'Ingrese nombre del colaborador',
+                inputValue: name
+            },
+            {
+                title: 'Email',
+                text: 'Ingrese email corporativo',
+                inputValue: email
+            },
+            {
+                title: 'Gerencia',
+                text: 'Elija el grupo asociado',
+                input: 'select',
+                inputValue: group_id,
+                inputOptions: groups
+            },
+        ]).then((result) => {
+            if (result.value) {
+                const answers = (result.value)
+                console.log(answers)
+                axios.post('resource/users', {
+                    id: id,
+                    email: answers[1],
+                    full_name: answers[0],
+                    group_id: parseInt(answers[2]),
+                    skills: skills
+                })
+                    .then(response => {
+                        // console.log(response);
+                        fillTable()
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Usuario Actualizado',
                     showConfirmButton: false,
                     timer: 1500
                 })
