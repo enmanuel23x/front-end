@@ -1,7 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import 'antd/dist/antd.css';
-import {Button, Space, Table, Tag} from 'antd';
+import {Button, Space, Table, Tag, Divider} from 'antd';
 import Swal from 'sweetalert2'
+import {
+    DeleteFilled,
+    EditFilled,
+    PlusOutlined
+} from '@ant-design/icons';
 const axios = require('axios').default;
 
 
@@ -94,13 +99,14 @@ const Categories = () => {
         {
             title: 'Operación',
             key: 'action',
-            width: "20%",
+            width: "5%",
+            align: 'center',
             render: (text, record) => (
                 <Space size="small">
                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                    <a onClick={() => deleteRecord(record.id,record.name)}>Eliminar</a>
+                    <a onClick={() => deleteRecord(record.id,record.name)}><DeleteFilled/></a>
                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                    <a>Editar</a>
+                    <a><EditFilled/></a>
                 </Space>
             ),
         },
@@ -182,12 +188,11 @@ const Categories = () => {
             <Button
                 onClick={createCategorie}
                 type="primary"
-                style={{
-                    marginBottom: 16,
-                }}
+                style={{ backgroundColor: "#08979c", borderColor: "#08979c" }}
             >
-                Agregar Nueva Categoria
+                Agregar Nueva Categoria <PlusOutlined/>
             </Button>
+            <Divider/>
             <Table
                 columns={columns}
                 dataSource={data}
