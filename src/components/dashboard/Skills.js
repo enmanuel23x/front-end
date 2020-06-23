@@ -20,6 +20,7 @@ async function getData() {
                 await skills.push({
                     name: response.data[i].name,
                     category: response.data[i].category_id,
+                    cat_name: response.data[i].category_name,
                     id: response.data[i].id
                 })
             }
@@ -54,8 +55,8 @@ const Skills = () => {
         },
         {
             title: 'Categoria',
-            dataIndex: 'category',
-            key: 'category',
+            dataIndex: 'cat_name',
+            key: 'cat_name',
         },
         {
             title: 'Operación',

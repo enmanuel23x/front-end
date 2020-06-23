@@ -64,6 +64,11 @@ const Categories = () => {
     useEffect(() => {
         fillTable()
     }, [])
+    function fillName(id){
+        const result= groups.filter( (el) => el.id ==id)[0];
+        const name = result == undefined ? "" : result.name;
+        return name;
+    }
     const columns = [
         {
             title: 'Nombre',
@@ -89,7 +94,7 @@ const Categories = () => {
                         }
                         return (
                             <Tag color={color} key={tag}>
-                                {tag}
+                                {fillName(tag)}
                             </Tag>
                         );
                     })}
@@ -106,13 +111,69 @@ const Categories = () => {
                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                     <a onClick={() => deleteRecord(record.id,record.name)}><DeleteFilled/></a>
                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                    <a><EditFilled/></a>
+                    <a onClick={() => editRecord(record)}><EditFilled/></a>
                 </Space>
             ),
         },
     ];
+    async function editRecord(record){
+        const id = record.id;
+        const checks = await groups.map( (element) => {
+            return record.tags.includes(parseInt(element.id))
+        });
+        const htmlChecks = await groups.map( (element,i) => (checks[i] ? 
+            '<tr><th scope="row"><input type="checkbox" name="'+element.id+'" id="'+element.id+'" checked/></th><td>'+element.name+'</td></tr>'
+            :
+            '<tr><th scope="row"><input type="checkbox" name="'+element.id+'" id="'+element.id+'" /></th><td>'+element.name+'</td></tr>')).join(",");
+        const { value: formValues } = await Swal.fire({
+            title: 'Crear categoria',
+            html:
+                '<form id="edit">'+
+              '<div class="form-group"><label for="exampleInputEmail1">Nombre de la categoria</label><input  class="form-control" type="text" name="t1" id="t1" placeholder="Nombre de la categoria" value="'+record.name+'"></div>' +
+              '<div class="form-group"><label for="exampleInputEmail1">Descripcion de la categoria</label><input  class="form-control"input type="text" name="t2" id="t2" placeholder="Descripcion de la categoria" value="'+record.description+'"></div>'+
+              '<table class="table"><thead class="thead-dark"><tr><th scope="col">Selección</th><th scope="col">Gerencia</th></tr></thead><tbody>'+
+              htmlChecks
+              +'</tbody></table></form>',
+            focusConfirm: false,
+            buttons: true,
+            showCancelButton: true,
+            confirmButtonText: 'Agregar',
+            cancelButtonText: 'Cancelar',
+            preConfirm: () => {
+                const data = document.getElementById("edit").elements;
+                let result = []
+                for (let i=0;i<data.length;i++){
+                    if(i == 0 || i == 1){
+                        result.push(data[i].value)
+                    }else{
+                        result.push(data[i].checked)
+                    }
+                }
+                return result;
+            }
+          })
+          
+          if (formValues) {
+            console.log(formValues);
+            const name = formValues[0], description = formValues[1];
+            const group_ids = JSON.stringify(groups.map( (group,i)=> formValues[2+i] ? group.id : null).filter( (el) => el != null ));
+            axios.post('resource/categories', {id ,name, description, group_ids})
+                .then(response => {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Categoria editada',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    fillTable()
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+          }
+    }
     async function createCategorie(){
-        
         const htmlChecks = await groups.map( (element) => '<tr><th scope="row"><input type="checkbox" name="'+element.id+'" id="'+element.id+'" checked="false" /></th><td>'+element.name+'</td></tr>').join(",");
         const { value: formValues } = await Swal.fire({
             title: 'Crear categoria',
@@ -144,8 +205,22 @@ const Categories = () => {
           
           if (formValues) {
             console.log(formValues);
-            //Valores del form ej: ["asfa", true, false, true, "564"]
-            //Por ahora primero ultimo no son checks
+            const name = formValues[0], description = formValues[1];
+            const group_ids = JSON.stringify(groups.map( (group,i)=> formValues[2+i] ? group.id : null).filter( (el) => el != null ));
+            axios.put('resource/categories', {name, description, group_ids})
+                .then(response => {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Nueva Categoria Añadida',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    fillTable()
+                })
+                .catch(error => {
+                    console.log(error);
+                });
           }
     }
     function deleteRecord(id, name){

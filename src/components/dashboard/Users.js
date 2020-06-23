@@ -22,7 +22,8 @@ async function getData() {
                     email: response.data[i].email,
                     group: response.data[i].group_id,
                     id: response.data[i].id,
-                    skills: response.data[i].skills
+                    skills: response.data[i].skills,
+                    group_name: response.data[i].group_name
                 })
             }
         })
@@ -62,7 +63,7 @@ const Users = () =>  {
         },
         {
             title: 'Grupo',
-            dataIndex: 'group',
+            dataIndex: 'group_name',
             align: 'right',
         },
         {
