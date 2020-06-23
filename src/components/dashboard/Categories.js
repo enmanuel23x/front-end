@@ -14,7 +14,7 @@ async function getData() {
                 await categories.push({
                     name: response.data[i].name,
                     description: response.data[i].description,
-                    tags: Array.from(response.data[i].group_ids),
+                    tags: JSON.parse(response.data[i].group_ids),
                     id: response.data[i].id
                 })
             }
@@ -84,7 +84,7 @@ const Categories = () => {
                         }
                         return (
                             <Tag color={color} key={tag}>
-                                {tag.toUpperCase()}
+                                {tag}
                             </Tag>
                         );
                     })}
@@ -107,21 +107,26 @@ const Categories = () => {
     ];
     async function createCategorie(){
         
-        const htmlChecks = await groups.map( (element) => '<p><input type="checkbox" name="'+element.id+'" id="'+element.id+'" checked="false" /><label for="'+element.id+'">'+element.name+'</label></p>').join(",");
+        const htmlChecks = await groups.map( (element) => '<tr><th scope="row"><input type="checkbox" name="'+element.id+'" id="'+element.id+'" checked="false" /></th><td>'+element.name+'</td></tr>').join(",");
         const { value: formValues } = await Swal.fire({
             title: 'Crear categoria',
             html:
                 '<form id="create">'+
-              '<p><input type="text" name="t1" id="t1"><label for="t1">Name</label></p>' +
-              htmlChecks+
-              '<p><input type="text" name="t2" id="t2"><label for="t2">Description</label></p>'
-              +'</form>',
+              '<div class="form-group"><label for="exampleInputEmail1">Nombre de la categoria</label><input  class="form-control" type="text" name="t1" id="t1" placeholder="Nombre de la categoria"></div>' +
+              '<div class="form-group"><label for="exampleInputEmail1">Descripcion de la categoria</label><input  class="form-control"input type="text" name="t2" id="t2" placeholder="Descripcion de la categoria"></div>'+
+              '<table class="table"><thead class="thead-dark"><tr><th scope="col">Selección</th><th scope="col">Gerencia</th></tr></thead><tbody>'+
+              htmlChecks
+              +'</tbody></table></form>',
             focusConfirm: false,
+            buttons: true,
+            showCancelButton: true,
+            confirmButtonText: 'Agregar',
+            cancelButtonText: 'Cancelar',
             preConfirm: () => {
                 const data = document.getElementById("create").elements;
                 let result = []
                 for (let i=0;i<data.length;i++){
-                    if(i == 0 || i == (data.length-1)){
+                    if(i == 0 || i == 1){
                         result.push(data[i].value)
                     }else{
                         result.push(data[i].checked)

@@ -69,6 +69,7 @@ class Profile extends Component {
     loadSkills(group){//Listo
         let obj=this;
         axios.get('/resource/skills/'+group).then(function (skills) {
+            console.log(skills)
           let custom =[], i = 0, prevCat = ""
           skills.data.forEach(element => {
               if(element.category_name == prevCat){
