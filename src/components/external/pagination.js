@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 /* eslint-disable import/first */
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import Skills from '../dashboard/Skills';
 let parent
 const swal = withReactContent(Swal);
 class Pagination extends Component {
@@ -18,7 +19,6 @@ class Pagination extends Component {
             isNextBtnActive: '',
             pageBound: 3
           };
-          this.lvls=null
           this.handleClick = this.handleClick.bind(this);
           this.btnDecrementClick = this.btnDecrementClick.bind(this);
           this.btnIncrementClick = this.btnIncrementClick.bind(this);
@@ -26,31 +26,30 @@ class Pagination extends Component {
           this.btnPrevClick = this.btnPrevClick.bind(this);
           this.setPrevAndNextBtnClass = this.setPrevAndNextBtnClass.bind(this);
           this.add=this.add.bind(this);
-          this.lvl=this.lvl.bind(this);
           this.validate=this.validate.bind(this);
+          this.lvl=this.lvl.bind(this);
           parent=props.obj
         }
-        lvl(index, e){
+        lvl(index, e){//Listo
           var change = {};
           change[index] = e.target.value;
           this.lvls = change
         }
-        validate(ids){
+        validate(id){//Listo
           if(parent.state.userSkill!=undefined){
-            const arr= parent.state.userSkill.map(item => item.id).filter(element => element == ids.lvl1 || element == ids.lvl2 || element == ids.lvl3 )
-            return arr.length!=0 ? true : false;
+            const exist= parent.state.userSkill.ids.includes(id)
+            return exist;
           }
         }
-        add(e){
-          e.preventDefault();
-          const index = e.target.value;
-          if(this.lvls !=null && this.lvls[index]!=undefined){
-            parent.addUserSkill(this.lvls[index],this.state.titulo)
+        add(index,ilvl){
+          index = index == -1 ? 0 : index;
+          if(this.lvls !=null && this.lvls[ilvl]!=undefined){
+            parent.addUserSkill(index, this.lvls[ilvl],this.state.titulo)
           }else{
             swal.fire({
               icon: 'error',
               title: 'Error en el nivel',
-              text: 'Debe seleccionar un nivel'
+              text: 'Debe seleccionar un nivel de conocimiento'
             })
           }
         }
@@ -113,29 +112,29 @@ class Pagination extends Component {
         // Logic for displaying current skills
         const indexOfLastskill = currentPage * skillsPerPage;
         const indexOfFirstskill = indexOfLastskill - skillsPerPage;
-        const currentskills = skills.slice(indexOfFirstskill, indexOfLastskill);
+        const currentskills = skills.skills.slice(indexOfFirstskill, indexOfLastskill);
         this.lvls = null
         const renderskills = currentskills.map((skill, index) => {
           return <tr key={index}>
-          <th scope="row">{skill.value}</th>
+          <th scope="row">{skill}</th>
           <th scope="row">
             <select className="form-control" onChange={this.lvl.bind(this, index)} defaultValue={'DEFAULT'}>
               <option value='DEFAULT' disabled>-- Seleccione un nivel --</option>
-              <option value={skill.levels.basic}>Básico</option>
-              <option value={skill.levels.medium}>Medio</option>
-              <option value={skill.levels.advanced}>Avanzado</option>
+              <option value="Básico">Básico</option>
+              <option value="Medio">Medio</option>
+              <option value="Avanzado">Avanzado</option>
             </select>
             </th>
           <th scope="row">
-          {!(this.validate({lvl1:skill.levels.basic,lvl2:skill.levels.medium,lvl3:skill.levels.advanced})) && <button className="btn btn-dark" value={index} onClick={this.add}>Agregar</button>}
-          {(this.validate({lvl1:skill.levels.basic,lvl2:skill.levels.medium,lvl3:skill.levels.advanced})) && <button className="btn btn-info" value={index} onClick={this.add}>Actualizar</button>}    
+          {!(this.validate(skills.ids[index])) && <button className="btn btn-dark" value={index} onClick={() => this.add(index+((currentPage-1)*this.state.skillsPerPage), index)}>Agregar</button>}
+          {(this.validate(skills.ids[index])) && <button className="btn btn-info" value={index} onClick={() => this.add(index+((currentPage-1)*this.state.skillsPerPage), index)}>Actualizar</button>}    
           </th>
       </tr>;
         });
 
         // Logic for displaying page numbers
         const pageNumbers = [];
-        for (let i = 1; i <= Math.ceil(skills.length / skillsPerPage); i++) {
+        for (let i = 1; i <= Math.ceil(skills.skills.length / skillsPerPage); i++) {
           pageNumbers.push(i);
         }
 
@@ -176,7 +175,7 @@ class Pagination extends Component {
             renderNextBtn = <li className="next"><span id="btnNext"> Siguiente </span></li>
         }
         else{
-            renderNextBtn = <li className="next"><a href="#/" id="btnNext" onClick={this.btnNextClick}> Siguiente </a></li>
+            renderNextBtn = <li className="next"><a href="#/" id="btnNext" onClick={this.btnNextClick}> Siguiente</a></li>
         }
         }
         return (
