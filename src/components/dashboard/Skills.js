@@ -14,7 +14,8 @@ async function getData() {
             for (let i = 0; i <  response.data.length; i++) {
                 await skills.push({
                     name: response.data[i].name,
-                    category: response.data[i].category_id
+                    category: response.data[i].category_id,
+                    id: response.data[i].id
                 })
             }
         })
