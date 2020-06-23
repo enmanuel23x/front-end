@@ -101,16 +101,23 @@ const Categories = () => {
         })
             .then((willDelete) => {
                 if (willDelete.value) {
-                    Swal.fire({
-                        title:"La categoria fue eliminada!",
-                        icon: "success",
-                    })
-                        .then((data) =>{
-                            axios.delete('resource/categories/'+id)
-                                .then( function (response) {
-                                    fillTable()
+                    axios.delete('resource/categories/'+id)
+                        .then( function (response) {
+                            if(response.data == "ERROR"){
+                                Swal.fire({
+                                    title:"La categoria no puede ser eliminado!",
+                                    text: "Por favor, verifique que la categoria no este en\n"+
+                                          "uso en alguna habilidad registrada",
+                                    icon: "warning",
                                 });
-                        });
+                            }else{
+                                Swal.fire({
+                                    title:"La categoria fue eliminado!",
+                                    icon: "success",
+                                });
+                            }
+                            fillTable()
+                            });
                 } else {
                     Swal.fire("La categoria no fue eliminada!");
                 }

@@ -82,16 +82,23 @@ const Groups = () => {
         })
             .then((willDelete) => {
                 if (willDelete.value) {
-                    Swal.fire({
-                        title:"El grupo fue eliminado!",
-                        icon: "success",
-                    })
-                        .then((data) =>{
-                            axios.delete('resource/groups/'+id)
-                                .then( function (response) {
-                                    fillTable()
+                    axios.delete('resource/groups/'+id)
+                        .then( function (response) {
+                            if(response.data == "ERROR"){
+                                Swal.fire({
+                                    title:"El grupo no puede ser eliminado!",
+                                    text: "Por favor, verifique que el grupo no este en\n"+
+                                          "uso en alguna categoria registrada",
+                                    icon: "warning",
                                 });
-                        });
+                            }else{
+                                Swal.fire({
+                                    title:"El grupo fue eliminado!",
+                                    icon: "success",
+                                });
+                            }
+                            fillTable()
+                            });
                 } else {
                     Swal.fire("El grupo no fue eliminado!");
                 }
