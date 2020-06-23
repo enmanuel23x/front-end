@@ -7,7 +7,6 @@ import Footer from "./external/Footer";
 import Swal from 'sweetalert2'
 import timeZoneConverter from 'time-zone-converter';
 import config from '../config/config';
-import categorias from '../config/skills.config';
 const axios = require('axios').default;
 axios.defaults.baseURL = config.backURL;
 const skillsPerPage = 1;
@@ -16,18 +15,20 @@ import keycloak from "../config/keycloak"
 const email = config.email;
 
 
-class Home extends Component {
+class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
         email: keycloak.idTokenParsed.email,
         name: keycloak.idTokenParsed.name,
         id: null,
+        full_name: null,
         userSkill: null,
         skills: null,
         defined: null,
+        group: null,
         cat: null,
-        custom_skills: null,
+        skills: null,
         currentPage: 1,
         upperPageBound: 3,
         lowerPageBound: 0,
@@ -39,58 +40,78 @@ class Home extends Component {
         err:0
 
     };
-    this.updateSkills = this.updateSkills.bind(this);
     this.charge = this.charge.bind(this);
     this.loadSkills = this.loadSkills.bind(this);
     this.btnNextClick = this.btnNextClick.bind(this);
     this.btnPrevClick = this.btnPrevClick.bind(this);
-    this.deleteUserSkill = this.deleteUserSkill.bind(this);
-    this.addUserSkill = this.addUserSkill.bind(this);
     this.submitForm = this.submitForm.bind(this);
     this.onChangeMessage = this.onChangeMessage.bind(this);
     this.conn_err = this.conn_err.bind(this);
+    this.deleteUserSkill = this.deleteUserSkill.bind(this);
+    this.updateSkills = this.updateSkills.bind(this);
+    this.addUserSkill = this.addUserSkill.bind(this);
     this.charge();
     }
-    updateSkills(){
-        const obj =this;
-        const ids = obj.state.userSkill.map(item => parseInt(item.id));
-        axios.post('/rg/resources/edit/'+obj.state.id,{skills:ids})
-        .then(function (res) {
-            Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: 'Datos guardados!',
-                showConfirmButton: false,
-                timer: 1500
-            })
-        }).catch(function (error) {
-            obj.conn_err();
-            console.error(error)
-        });
+    addUserSkill(index,lvl, cat){
+        const skills= this.state.skills.filter(item => item.title == cat);
+        const name = skills[0].skills[index];
+        const id = skills[0].ids[index];
+        const indexInUser = this.state.userSkill.ids.map( (element,i)=> element == id ? i : null)
+        let result = this.state.userSkill;
+        if(indexInUser.length!=0){
+            result.lvls[indexInUser[0]] = lvl
+        }else{
+            result.lvls.push(lvl);
+            result.ids.push(id);
+            result.names.push(name)
+        }
+        this.setState({userSkill: result})
     }
-    charge(){
+    loadSkills(group){//Listo
+        let obj=this;
+        axios.get('/resource/skills/'+group).then(function (skills) {
+          let custom =[], i = 0, prevCat = ""
+          skills.data.forEach(element => {
+              if(element.category_name == prevCat){
+                  custom[i].skills.push(element.name)
+                  custom[i].ids.push(element.id)
+              }else{
+                  if(prevCat!= ""){i++;}
+                  prevCat = element.category_name;
+                  custom.push({title: prevCat, skills:[element.name], ids:[element.id]})
+              }
+          });
+          console.log(custom)
+          obj.setState({skills:custom, defined:true})
+        }).catch(function (error) {
+          obj.conn_err();
+          console.error(error)
+      });
+      }
+    charge(){//en progreso
       let days = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
       let obj=this;
       let email=keycloak.idTokenParsed.email;
-      axios.get('/rg/resources/ids').then(function (res1) {
-          axios.post('/rg/resources/emails',{ids:res1.data}).then(function (res2) {
-              let index = res2.data.reduce(function(acc, curr, index) { if (curr === email) {acc.push(index);}return acc;}, []);
-              const id = res1.data[index];
-              if(id === undefined){
-                  obj.setState(
-                      {email:email,
-                          id: null,
-                          userSkill: null,
-                          skills:null,
-                          defined:false
-                      });
-              }else{
-                  obj.loadSkills(id)
-              }
-          }).catch(function (error) {
-            obj.conn_err();
-              console.error(error)
-          });
+      axios.get('/resource/users/'+email).then(function (res) {
+          console.log(JSON.parse(res.data[0].skills))
+        if(res.data.length==0){
+            obj.setState(
+                {email:email,
+                    id: null,
+                    userSkill: null,
+                    skills:null,
+                    defined:false
+                });
+        }else{
+            obj.setState(
+                {email:email,
+                    id: res.data[0].id,
+                    userSkill: JSON.parse(res.data[0].skills),
+                    full_name:  res.data[0].full_name,
+                    group: res.data[0].group_id
+                });
+          obj.loadSkills(res.data[0].group_id)
+        }
       }).catch(function (error) {
         obj.conn_err();
           console.error(error)
@@ -134,111 +155,7 @@ class Home extends Component {
               }
           });
     }
-    loadSkills(id){
-      let obj=this;
-      axios.get('/rg/skills').then(function (skills) {
-        console.log(skills.data)
-        axios.get('/rg/resource/'+id).then(function (res) {
-          if(res.data.selected_custom_field_options.length !== 0){
-              obj.setState({email:res.data.email,
-                  id: id,
-                  userSkill:res.data.selected_custom_field_options,
-                  skills: skills.data,
-                  defined:null
-              })
-          }else{
-              obj.setState({
-                  email:res.data.email,
-                  id: id,
-                  userSkill: null,
-                  skills:skills.data,
-                  defined:null
-              })
-          }
-
-          /* Get available Skills */
-          // Categories
-          let custom_fields = [];
-          let custom_levels = [];
-          let fields = [];
-          let values = [];
-          let categories = [];
-
-          let custom_skills = [];
-          let obj2 = obj.state.skills.sort(function(a, b) {
-            return a.value - b.value;
-          })
-          for (let i = 0; i < obj2.length; i++) {
-              custom_fields.push(obj2[i].value);
-              custom_levels.push(obj2[i].id);
-          }
-          for (let i = 0; i < custom_fields.length; i++) {
-              categories.push(obj.fillcategorys(custom_fields[i].split("/")[0]))
-          }
-
-          for (let i = 0; i < custom_fields.length; i++) {
-              values.push(custom_fields[i].split("/")[0])
-          }
-          values = values.filter((v, i, a) => a.indexOf(v) === i);
-          let prev="",index=0;
-          
-          for (let i = 0; i < values.length; i++) {
-          values[i] = [values[i],categories[i*3],[custom_levels[i*3],custom_levels[(i*3)+2],custom_levels[(i*3)+1]]]
-          }
-          values = values.sort( (a, b) => a[1].localeCompare(b[1]) )
-          for (let i = 0; i < values.length; i++) {
-            if(prev==""){
-                fields.push([{"value": values[i][0], "levels": {"advanced": values[i][2][0], "medium": values[i][2][2], "basic": values[i][2][1]}}]);
-              }else if(prev==values[i][1]){
-                fields[index].push({"value": values[i][0], "levels": {"advanced": values[i][2][0], "medium": values[i][2][2], "basic": values[i][2][1]} });
-              }else{
-                index++;
-                fields.push([{"value": values[i][0], "levels": {"advanced": values[i][2][0], "medium": values[i][2][2], "basic": values[i][2][1]}}]);
-              }
-              prev=values[i][1];
-          }
-
-          categories = categories.filter((v, i, a) => a.indexOf(v) === i);
-          categories = categories.sort( (a, b) => a.localeCompare(b) )
-          prev = "";let j=0;
-          for (let i = 0; i < categories.length; i++) {
-              if(prev != categories[i]){
-                custom_skills.push({"title": categories[i], "fields": fields[i]})
-                j=i;
-              }else{
-                custom_skills[j] = {"title": categories[i], "fields": [...custom_fields[j].fields,fields[i]]}
-              }
-              prev = categories[i]
-          }
-          obj.setState({
-              custom_skills: custom_skills
-          });
-          if(!(res.data.selected_custom_field_options==null || custom_skills==null)){
-            obj.setState({
-                defined: true
-            });
-          }
-          //console.log(obj.state)
-          // Levels and ids
-        }).catch(function (error) {
-            obj.conn_err();
-          console.error(error)
-        });
-      }).catch(function (error) {
-        obj.conn_err();
-        console.error(error)
-    });
-    }
-    fillcategorys(name){
-        let s=""
-        categorias.categorias.forEach(element => {
-            if(element.skills.filter( item =>  item==name).length!=0){
-               s = element.name;
-            }
-        });
-        return s;
-    }
-    btnPrevClick() {
+    btnPrevClick() {//listo
         if((this.state.currentPage -1)%this.state.pageBound === 0 ){
             this.setState({upperPageBound: this.state.upperPageBound - this.state.pageBound});
             this.setState({lowerPageBound: this.state.lowerPageBound - this.state.pageBound});
@@ -246,7 +163,7 @@ class Home extends Component {
         let listid = this.state.currentPage - 1;
         this.setState({ currentPage : listid});
     }
-    btnNextClick() {
+    btnNextClick() {//listo
         if((this.state.currentPage +1) > this.state.upperPageBound ){
             this.setState({upperPageBound: this.state.upperPageBound + this.state.pageBound});
             this.setState({lowerPageBound: this.state.lowerPageBound + this.state.pageBound});
@@ -254,7 +171,7 @@ class Home extends Component {
         let listid = this.state.currentPage + 1;
         this.setState({ currentPage : listid});
     }
-    conn_err(){
+    conn_err(){//listo
         if(this.state.err >= 2){
             this.setState({err:this.state.err+1})
             this.charge();
@@ -268,32 +185,7 @@ class Home extends Component {
         }
         
     }
-    deleteUserSkill(e){
-        e.preventDefault();
-        const id=e.target.value
-        this.setState({userSkill:this.state.userSkill.filter( item => item.id != id )})
-    }
-    addUserSkill(id,title){
-        const skills= this.state.custom_skills.filter(item => item.title == title).map(item => item.fields);
-        const res = skills[0].filter(item => item.levels.basic == id || item.levels.advanced == id || item.levels.medium == id );
-        let l = res[0].levels.medium == id ? "Medio" : "Básico";
-            l = res[0].levels.advanced == id ? "Avanzado" : l;
-            l = res[0].value+"/"+l
-        let us 
-        if(res.length!=0){
-            this.setState({userSkill:this.state.userSkill.filter( item => item.id != res[0].levels.basic && item.id != res[0].levels.medium && item.id != res[0].levels.advanced)},
-            ()=>{
-                us= this.state.userSkill
-                us.push({id:id,name: "Skills", value: l})
-                this.setState({userSkill:us});
-            })
-        }else{
-            us= this.state.userSkill
-            us.push({id:id,name: "Skills", value: l})
-            this.setState({userSkill:us});
-        }
-    }
-    submitForm(e, status){
+    submitForm(e, status){//listo
         let lack_skill = "Mapeo Conocimientos: Notificación de falta de habilidad";
         let unregistered = "Mapeo Conocimientos: Notificación para creación de usuario";
         e.preventDefault();
@@ -344,21 +236,51 @@ class Home extends Component {
         }
 
     }
-    onChangeMessage(event){
+    onChangeMessage(event){//listo
         this.setState({
             message: event.target.value
         })
     }
-
-
+    deleteUserSkill(id){//listo
+        const index = this.state.userSkill.ids.map( (item, i) => item == id ? i : null ).filter( (item) => item != null)[0];
+        const result = {ids: this.state.userSkill.ids.filter( (item, i) => i != index), lvls: this.state.userSkill.lvls.filter( (item, i) => i != index), names: this.state.userSkill.names.filter( (item, i) => i != index)}
+        this.setState({userSkill: result})
+    }
+    updateSkills(){
+        const obj =this;
+        console.log({
+            id: obj.state.id, 
+            email: obj.state.email, 
+            full_name: obj.state.full_name, 
+            group_id: obj.state.group, 
+            skills: obj.state.userSkill})
+        axios.post('/resource/users',{
+            id: obj.state.id, 
+            email: obj.state.email, 
+            full_name: obj.state.full_name, 
+            group_id: obj.state.group, 
+            skills: JSON.stringify(obj.state.userSkill)})
+        .then(function (res) {
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Datos guardados!',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }).catch(function (error) {
+            obj.conn_err();
+            console.error(error)
+        });
+    }
   render() {
     const indexOfLastskill = this.state.currentPage * skillsPerPage;
     const indexOfFirstskill = indexOfLastskill - skillsPerPage;
     let currentskills,renderskills = null;
     if(this.state.defined === true){
-        currentskills = this.state.custom_skills.slice(indexOfFirstskill, indexOfLastskill);
+        currentskills = this.state.skills.slice(indexOfFirstskill, indexOfLastskill);
         renderskills= currentskills.map((item,index) => {
-            return <Pagination key={index+indexOfFirstskill} skills={item.fields} obj={this} label={item.title}/>;
+            return <Pagination key={index+indexOfFirstskill} skills={item} obj={this} label={item.title}/>;
           });
     }
     return (
@@ -411,8 +333,8 @@ class Home extends Component {
                          <div>
                              {this.state.currentPage == 1 && <button disabled className="btn btn-secondary">Atrás</button>}
                              {this.state.currentPage > 1 && <button onClick={this.btnPrevClick} className="btn btn-secondary">Atrás</button>}
-                             {this.state.custom_skills.length/skillsPerPage > this.state.currentPage && <button onClick={this.btnNextClick} className="btn btn-info ml-3">Siguiente</button>}
-                             {!(this.state.custom_skills.length/skillsPerPage > this.state.currentPage) && <button className="btn btn-info ml-3" disabled>Siguiente</button>}
+                             {this.state.skills.length/skillsPerPage > this.state.currentPage && <button onClick={this.btnNextClick} className="btn btn-info ml-3">Siguiente</button>}
+                             {!(this.state.skills.length/skillsPerPage > this.state.currentPage) && <button className="btn btn-info ml-3" disabled>Siguiente</button>}
                          </div>
                          <hr/>
                          {/*Actividad de usuario*/}
@@ -446,19 +368,19 @@ class Home extends Component {
                                  </tr>
                                  </thead>
                                  <tbody>
-                                 {React.Children.toArray(this.state.userSkill.filter(item => item.name =="Skills").map((item, i) =>
+                                 {React.Children.toArray(this.state.userSkill.names.map((item, i) =>
                                      <tr>
                                          <th scope="row">{i+1}</th>
-                                         <th scope="row">{item.value.split("/")[0]}</th>
-                                         <th scope="row">{item.value.split("/")[1]}</th>
+                                         <th scope="row">{item}</th>
+                                         <th scope="row">{this.state.userSkill.lvls[i]}</th>
                                          <th scope="row">
-                                             <button className="btn btn-danger" value={item.id} onClick={this.deleteUserSkill}>Eliminar</button>
+                                             <button className="btn btn-danger" value={item.id} onClick={() => this.deleteUserSkill(this.state.userSkill.ids[i])}>Eliminar</button>
                                          </th>
                                      </tr>
                                  ))}
                                  </tbody>
                              </table>
-                             {this.state.userSkill.filter(item => item.name =="Skills").length == 0 &&
+                             {this.state.userSkill.names.length == 0 &&
                                  <h5>No posee habilidades registradas actualmente</h5>}
                          </div>
                          <button onClick={this.updateSkills} className="btn btn-info mb-2">Guardar</button>
@@ -503,4 +425,4 @@ class Home extends Component {
     );
   }
 }
-export default Home;
+export default Profile;
