@@ -61,7 +61,6 @@ const Skills = () => {
                         .then((data) =>{
                             axios.delete('resource/skills/'+id)
                                 .then( function (response) {
-                                    console.log(response)
                                     fillTable()
                                 });
                         });

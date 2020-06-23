@@ -4,32 +4,6 @@ import {Button, Space, Table} from 'antd';
 import Swal from "sweetalert2";
 const axios = require('axios').default;
 
-const columns = [
-    {
-        title: 'Gerencia',
-        dataIndex: 'name',
-        width: "15%"
-    },
-    {
-        title: 'Descripción',
-        dataIndex: 'description',
-        align: 'right',
-        width: "65%"
-    },
-    {
-        title: 'Operación',
-        key: 'action',
-        width: "20%",
-        render: (text, record) => (
-            <Space size="small">
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                <a>Eliminar</a>
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                <a>Editar</a>
-            </Space>
-        ),
-    },
-];
 async function getData() {
     let groups = []
     await axios.get('/resource/groups')
@@ -39,6 +13,7 @@ async function getData() {
                 await groups.push({
                     name: response.data[i].name,
                     description: response.data[i].description,
+                    id: response.data[i].id
                 })
             }
         })
@@ -68,7 +43,60 @@ const Groups = () => {
 
 
     }, [])
-
+    const columns = [
+        {
+            title: 'Gerencia',
+            dataIndex: 'name',
+            width: "15%"
+        },
+        {
+            title: 'Descripción',
+            dataIndex: 'description',
+            align: 'right',
+            width: "65%"
+        },
+        {
+            title: 'Operación',
+            key: 'action',
+            width: "20%",
+            render: (text, record) => (
+                <Space size="small">
+                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                    <a onClick={() => deleteRecord(record.id,record.name)}>Eliminar</a>
+                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                    <a>Editar</a>
+                </Space>
+            ),
+        },
+    ];
+    function deleteRecord(id, name){
+        Swal.fire({
+            title: "¿Quieres eliminar el grupo "+name+"?",
+            text: "Una vez eliminado no se podra recuperar",
+            icon: "warning",
+            buttons: true,
+            showCancelButton: true,
+            confirmButtonText: 'Eliminar',
+            cancelButtonText: 'Cancelar',
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete.value) {
+                    Swal.fire({
+                        title:"El grupo fue eliminado!",
+                        icon: "success",
+                    })
+                        .then((data) =>{
+                            axios.delete('resource/groups/'+id)
+                                .then( function (response) {
+                                    fillTable()
+                                });
+                        });
+                } else {
+                    Swal.fire("El grupo no fue eliminado!");
+                }
+            });
+    }
     async function createGroup(){
         Swal.mixin({
             input: 'text',

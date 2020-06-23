@@ -94,7 +94,6 @@ const Users = () =>  {
                         .then((data) =>{
                             axios.delete('resource/users/'+id)
                                 .then( function (response) {
-                                    console.log(response)
                                     fillTable()
                                 });
                         });
