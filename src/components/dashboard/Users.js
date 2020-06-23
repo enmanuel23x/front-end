@@ -1,29 +1,28 @@
-import React from 'react';
+import React, {useState} from 'react';
 import 'antd/dist/antd.css';
 import {Button, Space, Table} from 'antd';
+import config from "../../config/config";
+const axios = require('axios').default;
+
 
 const columns = [
     {
         title: 'Nombre',
         dataIndex: 'name',
-        width: "15%"
     },
     {
         title: 'Email',
-        dataIndex: 'description',
+        dataIndex: 'email',
         align: 'right',
-        width: "65%"
     },
     {
         title: 'Grupo',
-        dataIndex: 'description',
+        dataIndex: 'group',
         align: 'right',
-        width: "65%"
     },
     {
         title: 'Operación',
         key: 'action',
-        width: "20%",
         render: (text, record) => (
             <Space size="small">
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
@@ -35,33 +34,33 @@ const columns = [
     },
 ];
 
-const data = [
-    {
-        key: '1',
-        name: 'Aplicaciones',
-        description: '...',
-    },
-    {
-        key: '2',
-        name: 'Operaciones',
-        description: '...',
-    },
-
-];
-//
-// const rowSelection = {
-//     onChange: (selectedRowKeys, selectedRows) => {
-//         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-//     },
-//     onSelect: (record, selected, selectedRows) => {
-//         console.log(record, selected, selectedRows);
-//     },
-//     onSelectAll: (selected, selectedRows, changeRows) => {
-//         console.log(selected, selectedRows, changeRows);
-//     },
-// };
 
 const Users = () => {
+    const [data, setData] = useState([]);
+
+    let users = []
+    axios.get('/resource/tableUser')
+        .then(function (response) {
+            // handle success
+            console.log(response.data);
+            for (let i = 0; i <  response.data.length; i++) {
+                users.push({
+                    name: response.data[i].full_name,
+                    email: response.data[i].email,
+                    group: response.data[i].group_id
+                })
+            }
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        })
+        .then(function () {
+            setData(users)
+            console.log(data)
+            // always executed
+        });
+
     return (
         <div>
             <Button
@@ -78,6 +77,7 @@ const Users = () => {
                 dataSource={data}
                 // rowSelection={rowSelection}
                 bordered
+
             />
         </div>
 

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import 'antd/dist/antd.css';
-import {Button, Space, Table} from 'antd';
+import {Button, Space, Table, Tag} from 'antd';
+const axios = require('axios').default;
 
 const columns = [
     {
@@ -10,9 +11,29 @@ const columns = [
     },
     {
         title: 'Descripcion',
-        className: 'column-money',
-        dataIndex: 'money',
+        className: 'description',
+        dataIndex: 'description',
         align: 'right',
+    },
+    {
+        title: 'Grupos',
+        key: 'tags',
+        dataIndex: 'tags',
+        render: tags => (
+            <>
+                {tags.map(tag => {
+                    let color = tag.length > 5 ? 'geekblue' : 'green';
+                    if (tag === 'loser') {
+                        color = 'volcano';
+                    }
+                    return (
+                        <Tag color={color} key={tag}>
+                            {tag.toUpperCase()}
+                        </Tag>
+                    );
+                })}
+            </>
+        ),
     },
     {
         title: 'Operación',
@@ -29,25 +50,34 @@ const columns = [
     },
 ];
 
-const data = [
-    {
-        key: '1',
-        name: 'John Brown',
-        money: '￥300,000.00',
-    },
-    {
-        key: '2',
-        name: 'Jim Green',
-        money: '￥1,256,000.00',
-    },
-    {
-        key: '3',
-        name: 'Joe Black',
-        money: '￥120,000.00',
-    },
-];
 
 const Categories = () => {
+
+    const [data, setData] = useState([]);
+
+    let categories = []
+    axios.get('/resource/categories')
+        .then(function (response) {
+            // handle success
+            console.log(response.data);
+            for (let i = 0; i <  response.data.length; i++) {
+                categories.push({
+                    name: response.data[i].name,
+                    description: response.data[i].description,
+                    tags: Array.from(response.data[i].group_ids)
+                })
+            }
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        })
+        .then(function () {
+            setData(categories)
+            // always executed
+        });
+
+
     return (
         <div>
             <Button

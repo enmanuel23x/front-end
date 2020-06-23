@@ -3,6 +3,7 @@ import { Layout, Menu, Typography } from 'antd';
 import 'antd/dist/antd.css';
 import './assets/css/navigation.css';
 
+
 // Components
 import UsersTable from "./Users";
 import Skills from "./Skills";
@@ -17,8 +18,10 @@ import {
     AppstoreOutlined,
     LogoutOutlined
 } from '@ant-design/icons';
+import config from "../../config/config";
 
-
+const axios = require('axios').default;
+axios.defaults.baseURL = config.backURL;
 const { Title } = Typography;
 const { Header, Sider, Content } = Layout;
 
@@ -46,16 +49,15 @@ class SiderDemo extends React.Component {
                         <Menu.Item key="2" icon={<BarChartOutlined />}  onClick={() => this.setState({selected: 2})}>
                             Habilidades
                         </Menu.Item>
-
-
+                        <Menu.Item key="5" icon={<LogoutOutlined />}>
+                            Salir
+                        </Menu.Item>
                     </Menu>
                 </Sider>
                 <Layout className="site-layout">
                     <Header className="site-layout-background" style={{ padding: 0 }}>
                         {/* eslint-disable-next-line react/jsx-no-undef */}
                         <Title level={4} style={{paddingTop: "20px", paddingLeft:"20px", paddingBottom:"20px"}}>Mapeo de conocimiento - Panel Administrativo</Title>
-                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-
                     </Header>
                     <Content
                         className="site-layout-background"

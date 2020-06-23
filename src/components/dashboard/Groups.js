@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import 'antd/dist/antd.css';
 import {Button, Space, Table} from 'antd';
+const axios = require('axios').default;
 
 const columns = [
     {
@@ -29,33 +30,32 @@ const columns = [
     },
 ];
 
-const data = [
-    {
-        key: '1',
-        name: 'Aplicaciones',
-        description: '...',
-    },
-    {
-        key: '2',
-        name: 'Operaciones',
-        description: '...',
-    },
 
-];
-//
-// const rowSelection = {
-//     onChange: (selectedRowKeys, selectedRows) => {
-//         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-//     },
-//     onSelect: (record, selected, selectedRows) => {
-//         console.log(record, selected, selectedRows);
-//     },
-//     onSelectAll: (selected, selectedRows, changeRows) => {
-//         console.log(selected, selectedRows, changeRows);
-//     },
-// };
 
 const Groups = () => {
+    const [data, setData] = useState([]);
+
+    let groups = []
+    axios.get('/resource/groups')
+        .then(function (response) {
+            // handle success
+            console.log(response.data);
+            for (let i = 0; i <  response.data.length; i++) {
+                groups.push({
+                    name: response.data[i].name,
+                    description: response.data[i].description,
+                })
+            }
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        })
+        .then(function () {
+            setData(groups)
+            // always executed
+        });
+
     return (
         <div>
             <Button
