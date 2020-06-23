@@ -82,7 +82,11 @@ class Profile extends Component {
               }
           });
           console.log(custom)
-          obj.setState({skills:custom, defined:true})
+          if(obj.state.userSkill.length!=0){
+            obj.setState({skills:custom, defined:true})
+          }else{
+            obj.setState({skills:custom, defined:false})
+          }
         }).catch(function (error) {
           obj.conn_err();
           console.error(error)
@@ -93,7 +97,6 @@ class Profile extends Component {
       let obj=this;
       let email=keycloak.idTokenParsed.email;
       axios.get('/resource/users/'+email).then(function (res) {
-          console.log(JSON.parse(res.data[0].skills))
         if(res.data.length==0){
             obj.setState(
                 {email:email,
