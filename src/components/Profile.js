@@ -30,6 +30,8 @@ class Profile extends Component {
         id: null,
         full_name: null,
         group_name: null,
+        sede: null,
+        cargo: null,
         userSkill: null,
         skills: null,
         defined: null,
@@ -59,11 +61,13 @@ class Profile extends Component {
     this.charge();
     }
     addUserSkill(index,lvl, cat){
+        console.log(index,lvl, cat)
         const skills= this.state.skills.filter(item => item.title == cat);
         const name = skills[0].skills[index];
         const id = skills[0].ids[index];
-        const indexInUser = this.state.userSkill.ids.map( (element,i)=> element == id ? i : null)
+        const indexInUser = this.state.userSkill.ids.map( (element,i)=> element == id ? i : null).filter((el)=>el!=null)
         let result = this.state.userSkill;
+        console.log("indexUser:"+indexInUser.length!=0)
         if(indexInUser.length!=0){
             result.lvls[indexInUser[0]] = lvl
         }else{
@@ -117,7 +121,9 @@ class Profile extends Component {
                     userSkill: JSON.parse(res.data[0].skills),
                     full_name:  res.data[0].full_name,
                     group: res.data[0].group_id,
-                    group_name: res.data[0].group_name
+                    group_name: res.data[0].group_name,
+                    sede: res.data[0].sede,
+                    cargo: res.data[0].cargo
                 });
           obj.loadSkills(res.data[0].group_id)
         }
@@ -253,7 +259,10 @@ class Profile extends Component {
             email: obj.state.email, 
             full_name: obj.state.full_name, 
             group_id: obj.state.group, 
-            skills: JSON.stringify(obj.state.userSkill)})
+            skills: JSON.stringify(obj.state.userSkill),
+            sede: obj.state.sede,
+            cargo: obj.state.cargo
+        })
         .then(function (res) {
             Swal.fire({
                 position: 'top-end',
