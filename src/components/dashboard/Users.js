@@ -31,7 +31,9 @@ async function getData() {
                     group: response.data[i].group_id,
                     id: response.data[i].id,
                     skills: response.data[i].skills,
-                    group_name: response.data[i].group_name
+                    group_name: response.data[i].group_name,
+                    sede: response.data[i].sede,
+                    cargo: response.data[i].cargo
                 })
             }
         })
@@ -74,6 +76,14 @@ const Users = () =>  {
             align: 'right',
         },
         {
+            title: 'Cargo',
+            dataIndex: 'cargo'
+        },
+        {
+            title: 'Sede',
+            dataIndex: 'sede'
+        },
+        {
             title: 'Operación',
             key: 'action',
             width: "5%",
@@ -83,7 +93,7 @@ const Users = () =>  {
                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                     <a onClick={() => deleteRecord(record.id,record.name)}><DeleteFilled /></a>
                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                    <a onClick={() => updateUsers(record.id, record.name, record.email, record.group, record.skills)}><EditFilled /></a>
+                    <a onClick={() => updateUsers(record.id, record.name, record.email, record.group, record.skills, record.cargo, record.sede)}><EditFilled /></a>
 
                 </Space>
             ),
@@ -143,7 +153,7 @@ const Users = () =>  {
             cancelButtonText: 'Cancelar',
 
             showCancelButton: true,
-            progressSteps: ['1', '2', '3']
+            progressSteps: ['1', '2', '3', '4', '5']
         }).queue([
             {
                 title: 'Nombre',
@@ -159,13 +169,23 @@ const Users = () =>  {
                 input: 'select',
                 inputOptions: groups
             },
+            {
+                title: 'Cargo',
+                text: 'Cargo desempeñado en Intelix',
+            },
+            {
+                title: 'Sede',
+                text: 'Sede asociada',
+            }
         ]).then((result) => {
             if (result.value) {
                 const answers = (result.value)
                 axiosInstance.put('resource/users', {
                     email: answers[1],
                     full_name: answers[0],
-                    group_id: parseInt(answers[2])
+                    group_id: parseInt(answers[2]),
+                    cargo: answers[3],
+                    sede: answers[4]
                 })
                     .then(response => {
                         // console.log(response);
@@ -190,7 +210,7 @@ const Users = () =>  {
 
     }
 
-    function updateUsers(id, name, email, group_id, skills){
+    function updateUsers(id, name, email, group_id, skills, cargo, sede){
         let groups = {}
         axiosInstance.get('/resource/groups')
             .then(async function (response) {
@@ -213,7 +233,7 @@ const Users = () =>  {
             cancelButtonText: 'Cancelar',
 
             showCancelButton: true,
-            progressSteps: ['1', '2', '3']
+            progressSteps: ['1', '2', '3', '4', '5']
         }).queue([
             {
                 title: 'Nombre',
@@ -232,6 +252,16 @@ const Users = () =>  {
                 inputValue: group_id,
                 inputOptions: groups
             },
+            {
+                title: 'Cargo',
+                text: 'Cargo desempeñado en Intelix',
+                inputValue: cargo
+            },
+            {
+                title: 'Sede',
+                text: 'Sede asociada',
+                inputValue: sede
+            }
         ]).then((result) => {
             if (result.value) {
                 const answers = (result.value)
@@ -240,7 +270,9 @@ const Users = () =>  {
                     email: answers[1],
                     full_name: answers[0],
                     group_id: parseInt(answers[2]),
-                    skills: skills
+                    skills: skills,
+                    cargo: answers[3],
+                    sede: answers[4]
                 })
                     .then(response => {
                         // console.log(response);
