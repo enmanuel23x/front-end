@@ -154,7 +154,6 @@ const Categories = () => {
           })
           
           if (formValues) {
-            console.log(formValues);
             const name = formValues[0], description = formValues[1];
             const group_ids = JSON.stringify(groups.map( (group,i)=> formValues[2+i] ? group.id : null).filter( (el) => el != null ));
             axios.post('resource/categories', {id ,name, description, group_ids})
@@ -204,7 +203,6 @@ const Categories = () => {
           })
           
           if (formValues) {
-            console.log(formValues);
             const name = formValues[0], description = formValues[1];
             const group_ids = JSON.stringify(groups.map( (group,i)=> formValues[2+i] ? group.id : null).filter( (el) => el != null ));
             axios.put('resource/categories', {name, description, group_ids})

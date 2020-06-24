@@ -23,6 +23,7 @@ class Profile extends Component {
         name: keycloak.idTokenParsed.name,
         id: null,
         full_name: null,
+        group_name: null,
         userSkill: null,
         skills: null,
         defined: null,
@@ -66,10 +67,9 @@ class Profile extends Component {
         }
         this.setState({userSkill: result})
     }
-    loadSkills(group){//Listo
+    loadSkills(group){
         let obj=this;
         axios.get('/resource/skills/'+group).then(function (skills) {
-            console.log(skills)
           let custom =[], i = 0, prevCat = ""
           skills.data.forEach(element => {
               if(element.category_name == prevCat){
@@ -81,7 +81,6 @@ class Profile extends Component {
                   custom.push({title: prevCat, skills:[element.name], ids:[element.id]})
               }
           });
-          console.log(custom)
           if(obj.state.userSkill.length!=0){
             obj.setState({skills:custom, defined:true})
           }else{
@@ -111,7 +110,8 @@ class Profile extends Component {
                     id: res.data[0].id,
                     userSkill: JSON.parse(res.data[0].skills),
                     full_name:  res.data[0].full_name,
-                    group: res.data[0].group_id
+                    group: res.data[0].group_id,
+                    group_name: res.data[0].group_name
                 });
           obj.loadSkills(res.data[0].group_id)
         }
@@ -121,44 +121,35 @@ class Profile extends Component {
       });
 
       function getDate(){
+          let create = false;
           axios.post('bd/data', {email: keycloak.idTokenParsed.email})
               .then((res) => {
-           //       console.log(res.data)
-                  let first_day = new Date(res.data[0].first_conn);
-                  let first_dayName = days[first_day.getDay()];
-                  let last_day = new Date(res.data[0].last_conn);
-                  let last_dayName = days[last_day.getDay()];
+                if(res.data.length == 0){
+                    create = true;
+                }else{
+                    let first_day = new Date(res.data[0].first_conn);
+                    let first_dayName = days[first_day.getDay()];
+                    let last_day = new Date(res.data[0].last_conn);
+                    let last_dayName = days[last_day.getDay()];
 
-                  const first_connection = first_dayName +", " + timeZoneConverter(res.data[0].first_conn, 0, -4, 'YYYY/MM/DD HH:mm');
-                  let last_connection = last_dayName +", " + timeZoneConverter(res.data[0].last_conn, 0, -4, 'YYYY/MM/DD HH:mm');
+                    const first_connection = first_dayName +", " + timeZoneConverter(res.data[0].first_conn, 0, -4, 'YYYY/MM/DD HH:mm');
+                    let last_connection = last_dayName +", " + timeZoneConverter(res.data[0].last_conn, 0, -4, 'YYYY/MM/DD HH:mm');
 
-                  obj.state.first_conn = first_connection;
-                  obj.state.last_conn = last_connection;
-                  // console.log("previa: ", obj.state.last_conn);
-                  axios.post('bd/update', {email: keycloak.idTokenParsed.email, create: false}).then(response => {
-                      axios.post('bd/data', {email: keycloak.idTokenParsed.email}).then(res2 => {
-                          obj.state.last_conn_updated = timeZoneConverter(res2.data[0].last_conn, 0, -4, 'YYYY/MM/DD HH:mm:ss');
-                          // console.log("actual: ", obj.state.last_conn_updated)
-                      })
+                    obj.state.first_conn = first_connection;
+                    obj.state.last_conn = last_connection;
+                    }
+                  axios.post('bd/update', {email: keycloak.idTokenParsed.email, create: create}).then(response => {
+                    if(create){
+                        getDate()
+                    }else{
+                        obj.state.last_conn_updated = timeZoneConverter(response.data, 0, -4, 'YYYY/MM/DD HH:mm:ss');
+                    }
                   })
               })
       }
-
-      axios.post('bd/data', {email: keycloak.idTokenParsed.email})
-          .then((res) => {
-              if (res.data.length === 0){
-                  axios.post('bd/update', {email: keycloak.idTokenParsed.email, create: true})
-                      .then(res => {
-                          //console.log("ok", res)
-                      }).then(()=> {
-                        getDate()
-                  })
-              } else {
-                  getDate()
-              }
-          });
+      getDate()
     }
-    btnPrevClick() {//listo
+    btnPrevClick() {
         if((this.state.currentPage -1)%this.state.pageBound === 0 ){
             this.setState({upperPageBound: this.state.upperPageBound - this.state.pageBound});
             this.setState({lowerPageBound: this.state.lowerPageBound - this.state.pageBound});
@@ -166,7 +157,7 @@ class Profile extends Component {
         let listid = this.state.currentPage - 1;
         this.setState({ currentPage : listid});
     }
-    btnNextClick() {//listo
+    btnNextClick() {
         if((this.state.currentPage +1) > this.state.upperPageBound ){
             this.setState({upperPageBound: this.state.upperPageBound + this.state.pageBound});
             this.setState({lowerPageBound: this.state.lowerPageBound + this.state.pageBound});
@@ -174,7 +165,7 @@ class Profile extends Component {
         let listid = this.state.currentPage + 1;
         this.setState({ currentPage : listid});
     }
-    conn_err(){//listo
+    conn_err(){
         if(this.state.err >= 2){
             this.setState({err:this.state.err+1})
             this.charge();
@@ -188,7 +179,7 @@ class Profile extends Component {
         }
         
     }
-    submitForm(e, status){//listo
+    submitForm(e, status){
         let lack_skill = "Mapeo Conocimientos: Notificación de falta de habilidad";
         let unregistered = "Mapeo Conocimientos: Notificación para creación de usuario";
         e.preventDefault();
@@ -239,24 +230,18 @@ class Profile extends Component {
         }
 
     }
-    onChangeMessage(event){//listo
+    onChangeMessage(event){
         this.setState({
             message: event.target.value
         })
     }
-    deleteUserSkill(id){//listo
+    deleteUserSkill(id){
         const index = this.state.userSkill.ids.map( (item, i) => item == id ? i : null ).filter( (item) => item != null)[0];
         const result = {ids: this.state.userSkill.ids.filter( (item, i) => i != index), lvls: this.state.userSkill.lvls.filter( (item, i) => i != index), names: this.state.userSkill.names.filter( (item, i) => i != index)}
         this.setState({userSkill: result})
     }
     updateSkills(){
         const obj =this;
-        console.log({
-            id: obj.state.id, 
-            email: obj.state.email, 
-            full_name: obj.state.full_name, 
-            group_id: obj.state.group, 
-            skills: obj.state.userSkill})
         axios.post('/resource/users',{
             id: obj.state.id, 
             email: obj.state.email, 
@@ -318,6 +303,8 @@ class Profile extends Component {
             }
             {this.state.defined === true &&
              <div>
+                 <h5 className="custom-h5"><b>Gerencia:</b> {this.state.group_name}</h5>
+                 <br></br>
                  <div className="row">
                      <div className="col pt-4">
                          <h5 className="custom-h5">Conocimientos Disponibles

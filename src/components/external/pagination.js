@@ -17,7 +17,8 @@ class Pagination extends Component {
             lowerPageBound: 0,
             isPrevBtnActive: 'disabled',
             isNextBtnActive: '',
-            pageBound: 3
+            pageBound: 3,
+            lvls: []
           };
           this.handleClick = this.handleClick.bind(this);
           this.btnDecrementClick = this.btnDecrementClick.bind(this);
@@ -30,12 +31,12 @@ class Pagination extends Component {
           this.lvl=this.lvl.bind(this);
           parent=props.obj
         }
-        lvl(index, e){//Listo
+        lvl(index, e){
           var change = {};
           change[index] = e.target.value;
-          this.lvls = change
+          this.setState({lvls:change});
         }
-        validate(id){//Listo
+        validate(id){
           if(parent.state.userSkill!=undefined){
             const exist= parent.state.userSkill.ids.includes(id)
             return exist;
@@ -43,8 +44,8 @@ class Pagination extends Component {
         }
         add(index,ilvl){
           index = index == -1 ? 0 : index;
-          if(this.lvls !=null && this.lvls[ilvl]!=undefined){
-            parent.addUserSkill(index, this.lvls[ilvl],this.state.titulo)
+          if(this.state.lvls !=null && this.state.lvls[ilvl]!=undefined){
+            parent.addUserSkill(index, this.state.lvls[ilvl],this.state.titulo)
           }else{
             swal.fire({
               icon: 'error',
@@ -113,7 +114,6 @@ class Pagination extends Component {
         const indexOfLastskill = currentPage * skillsPerPage;
         const indexOfFirstskill = indexOfLastskill - skillsPerPage;
         const currentskills = skills.skills.slice(indexOfFirstskill, indexOfLastskill);
-        this.lvls = null
         const renderskills = currentskills.map((skill, index) => {
           return <tr key={index}>
           <th scope="row">{skill}</th>

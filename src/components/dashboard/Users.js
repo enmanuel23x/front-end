@@ -44,7 +44,6 @@ const Users = () =>  {
     const [data, setData] = useState([]);
     async function fillTable(){
         let info = await getData()
-        console.log(info)
         setData(info)
     }
     useEffect(() => {
@@ -155,7 +154,6 @@ const Users = () =>  {
         ]).then((result) => {
             if (result.value) {
                 const answers = (result.value)
-                console.log(answers)
                 axios.put('resource/users', {
                     email: answers[1],
                     full_name: answers[0],
@@ -185,7 +183,6 @@ const Users = () =>  {
     }
 
     function updateUsers(id, name, email, group_id, skills){
-        console.log(id, name, email, group_id, skills)
         let groups = {}
         axios.get('/resource/groups')
             .then(async function (response) {
@@ -230,7 +227,6 @@ const Users = () =>  {
         ]).then((result) => {
             if (result.value) {
                 const answers = (result.value)
-                console.log(answers)
                 axios.post('resource/users', {
                     id: id,
                     email: answers[1],

@@ -39,7 +39,6 @@ const Groups = () => {
 
     async function fillTable(){
         let info = await getData()
-        console.log(info)
         setData(info)
     }
     useEffect(() => {
