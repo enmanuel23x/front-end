@@ -64,7 +64,6 @@ const Groups = () => {
         {
             title: 'Descripción',
             dataIndex: 'description',
-            align: 'right',
             width: "65%"
         },
         {
@@ -133,6 +132,7 @@ const Groups = () => {
             {
                 title: 'Descripción',
                 text: 'Breve descripción',
+                input: 'textarea'
             },
         ]).then((result) => {
             if (result.value) {
@@ -176,7 +176,8 @@ const Groups = () => {
             {
                 title: 'Descripción',
                 text: 'Breve descripción',
-                inputValue: description
+                inputValue: description,
+                input: 'textarea'
             },
         ]).then((result) => {
             if (result.value) {

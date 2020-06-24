@@ -86,8 +86,7 @@ const Categories = () => {
         {
             title: 'Descripcion',
             className: 'description',
-            dataIndex: 'description',
-            align: 'right',
+            dataIndex: 'description'
         },
         {
             title: 'Grupos',

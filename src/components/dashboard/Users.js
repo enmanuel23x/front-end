@@ -68,12 +68,10 @@ const Users = () =>  {
         {
             title: 'Email',
             dataIndex: 'email',
-            align: 'right',
         },
         {
             title: 'Grupo',
             dataIndex: 'group_name',
-            align: 'right',
         },
         {
             title: 'Cargo',
@@ -161,7 +159,8 @@ const Users = () =>  {
             },
             {
                 title: 'Email',
-                text: 'Ingrese email corporativo'
+                text: 'Ingrese email corporativo',
+                input: 'email'
             },
             {
                 title: 'Gerencia',
@@ -243,6 +242,7 @@ const Users = () =>  {
             {
                 title: 'Email',
                 text: 'Ingrese email corporativo',
+                input: 'email',
                 inputValue: email
             },
             {
