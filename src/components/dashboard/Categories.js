@@ -7,12 +7,20 @@ import {
     EditFilled,
     PlusOutlined
 } from '@ant-design/icons';
+import config from "../../config/config";
+import https from 'https';
 const axios = require('axios').default;
+axios.defaults.baseURL = config.backURL;
+const axiosInstance = axios.create({
+    httpsAgent: new https.Agent({  
+      rejectUnauthorized: false
+    })
+  });
 
 
 async function getData() {
     let categories = []
-    await axios.get('/resource/categories')
+    await axiosInstance.get('/resource/categories')
         .then(async function (response) {
             // handle success
             for (let i = 0; i <  response.data.length; i++) {
@@ -36,7 +44,7 @@ async function getData() {
 }
 async function getData2() {
     let groups = []
-    await axios.get('/resource/groups')
+    await axiosInstance.get('/resource/groups')
         .then(async function (response) {
             groups = await response.data;
         })
@@ -156,7 +164,7 @@ const Categories = () => {
           if (formValues) {
             const name = formValues[0], description = formValues[1];
             const group_ids = JSON.stringify(groups.map( (group,i)=> formValues[2+i] ? group.id : null).filter( (el) => el != null ));
-            axios.post('resource/categories', {id ,name, description, group_ids})
+            axiosInstance.post('resource/categories', {id ,name, description, group_ids})
                 .then(response => {
                     Swal.fire({
                         position: 'top-end',
@@ -205,7 +213,7 @@ const Categories = () => {
           if (formValues) {
             const name = formValues[0], description = formValues[1];
             const group_ids = JSON.stringify(groups.map( (group,i)=> formValues[2+i] ? group.id : null).filter( (el) => el != null ));
-            axios.put('resource/categories', {name, description, group_ids})
+            axiosInstance.put('resource/categories', {name, description, group_ids})
                 .then(response => {
                     Swal.fire({
                         position: 'top-end',
@@ -234,7 +242,7 @@ const Categories = () => {
         })
             .then((willDelete) => {
                 if (willDelete.value) {
-                    axios.delete('resource/categories/'+id)
+                    axiosInstance.delete('resource/categories/'+id)
                         .then( function (response) {
                             if(response.data == "ERROR"){
                                 Swal.fire({

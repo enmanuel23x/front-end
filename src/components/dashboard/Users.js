@@ -8,12 +8,20 @@ import {
     EditFilled,
     PlusOutlined
 } from '@ant-design/icons';
+import config from "../../config/config";
+import https from 'https';
 const axios = require('axios').default;
+axios.defaults.baseURL = config.backURL;
+const axiosInstance = axios.create({
+    httpsAgent: new https.Agent({  
+      rejectUnauthorized: false
+    })
+  });
 
 
 async function getData() {
     let users = []
-    await axios.get('/resource/tableUser')
+    await axiosInstance.get('/resource/tableUser')
         .then(async function (response) {
             // handle success
             for (let i = 0; i <  response.data.length; i++) {
@@ -101,7 +109,7 @@ const Users = () =>  {
                         icon: "success",
                     })
                         .then((data) =>{
-                            axios.delete('resource/users/'+id)
+                            axiosInstance.delete('resource/users/'+id)
                                 .then( function (response) {
                                     fillTable()
                                 });
@@ -114,7 +122,7 @@ const Users = () =>  {
 
     async function createUsers(){
         let groups = {}
-        await axios.get('/resource/groups')
+        await axiosInstance.get('/resource/groups')
             .then(async function (response) {
                 // handle success
                 for (let i = 0; i <  response.data.length; i++) {
@@ -154,7 +162,7 @@ const Users = () =>  {
         ]).then((result) => {
             if (result.value) {
                 const answers = (result.value)
-                axios.put('resource/users', {
+                axiosInstance.put('resource/users', {
                     email: answers[1],
                     full_name: answers[0],
                     group_id: parseInt(answers[2])
@@ -184,7 +192,7 @@ const Users = () =>  {
 
     function updateUsers(id, name, email, group_id, skills){
         let groups = {}
-        axios.get('/resource/groups')
+        axiosInstance.get('/resource/groups')
             .then(async function (response) {
                 // handle success
                 for (let i = 0; i <  response.data.length; i++) {
@@ -227,7 +235,7 @@ const Users = () =>  {
         ]).then((result) => {
             if (result.value) {
                 const answers = (result.value)
-                axios.post('resource/users', {
+                axiosInstance.post('resource/users', {
                     id: id,
                     email: answers[1],
                     full_name: answers[0],

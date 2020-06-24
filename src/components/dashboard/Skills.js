@@ -7,13 +7,19 @@ import {
     EditFilled,
     PlusOutlined
 } from '@ant-design/icons';
+import config from "../../config/config";
+import https from 'https';
 const axios = require('axios').default;
-
-
+axios.defaults.baseURL = config.backURL;
+const axiosInstance = axios.create({
+    httpsAgent: new https.Agent({  
+      rejectUnauthorized: false
+    })
+  });
 
 async function getData() {
     let skills = []
-    await axios.get('/resource/tableSkills')
+    await axiosInstance.get('/resource/tableSkills')
         .then(async function (response) {
             // handle success
             for (let i = 0; i <  response.data.length; i++) {
@@ -91,7 +97,7 @@ const Skills = () => {
                         icon: "success",
                     })
                         .then((data) =>{
-                            axios.delete('resource/skills/'+id)
+                            axiosInstance.delete('resource/skills/'+id)
                                 .then( function (response) {
                                     fillTable()
                                 });
@@ -105,7 +111,7 @@ const Skills = () => {
 
     async function createSkill(){
         let skills = {}
-        await axios.get('/resource/categories')
+        await axiosInstance.get('/resource/categories')
             .then(async function (response) {
                 // handle success
                 for (let i = 0; i <  response.data.length; i++) {
@@ -145,7 +151,7 @@ const Skills = () => {
             if (result.value) {
                 const answers = (result.value)
 
-                axios.put('resource/skills', {
+                axiosInstance.put('resource/skills', {
                     name: answers[0],
                     category_id: parseInt(answers[1])
                 })
@@ -171,7 +177,7 @@ const Skills = () => {
 
     function updateSkill(id, name, category) {
         let skills = {}
-        axios.get('/resource/categories')
+        axiosInstance.get('/resource/categories')
             .then(async function (response) {
                 // handle success
                 for (let i = 0; i <  response.data.length; i++) {
@@ -213,7 +219,7 @@ const Skills = () => {
             if (result.value) {
                 const answers = (result.value)
 
-                axios.post('resource/skills', {
+                axiosInstance.post('resource/skills', {
                     id: id,
                     name: answers[0],
                     category_id: parseInt(answers[1])

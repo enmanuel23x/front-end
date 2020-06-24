@@ -6,9 +6,15 @@ import Pagination from "./external/pagination";
 import Footer from "./external/Footer";
 import Swal from 'sweetalert2'
 import timeZoneConverter from 'time-zone-converter';
-import config from '../config/config';
+import config from "../config/config";
+import https from 'https';
 const axios = require('axios').default;
 axios.defaults.baseURL = config.backURL;
+const axiosInstance = axios.create({
+    httpsAgent: new https.Agent({  
+      rejectUnauthorized: false
+    })
+  });
 const skillsPerPage = 1;
 import keycloak from "../config/keycloak"
 /* Write here the email address that will receive the messages  */
@@ -69,7 +75,7 @@ class Profile extends Component {
     }
     loadSkills(group){
         let obj=this;
-        axios.get('/resource/skills/'+group).then(function (skills) {
+        axiosInstance.get('/resource/skills/'+group).then(function (skills) {
           let custom =[], i = 0, prevCat = ""
           skills.data.forEach(element => {
               if(element.category_name == prevCat){
@@ -95,7 +101,7 @@ class Profile extends Component {
       let days = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
       let obj=this;
       let email=keycloak.idTokenParsed.email;
-      axios.get('/resource/users/'+email).then(function (res) {
+      axiosInstance.get('/resource/users/'+email).then(function (res) {
         if(res.data.length==0){
             obj.setState(
                 {email:email,
@@ -122,7 +128,7 @@ class Profile extends Component {
 
       function getDate(){
           let create = false;
-          axios.post('bd/data', {email: keycloak.idTokenParsed.email})
+          axiosInstance.post('bd/data', {email: keycloak.idTokenParsed.email})
               .then((res) => {
                 if(res.data.length == 0){
                     create = true;
@@ -138,7 +144,7 @@ class Profile extends Component {
                     obj.state.first_conn = first_connection;
                     obj.state.last_conn = last_connection;
                     }
-                  axios.post('bd/update', {email: keycloak.idTokenParsed.email, create: create}).then(response => {
+                  axiosInstance.post('bd/update', {email: keycloak.idTokenParsed.email, create: create}).then(response => {
                     if(create){
                         getDate()
                     }else{
@@ -185,7 +191,7 @@ class Profile extends Component {
         e.preventDefault();
         let obj = this;
         if (status === 1){
-            axios.post('/email/send', {"email": email, "subject": lack_skill,
+            axiosInstance.post('/email/send', {"email": email, "subject": lack_skill,
                 // eslint-disable-next-line no-useless-concat
                 "text":"Colaborador: "+ keycloak.idTokenParsed.name +'\n' + "Correo: " + keycloak.idTokenParsed.email + '\n' + "Mensaje: " + obj.state.message}).then((res) =>{
                 Swal.fire({
@@ -207,7 +213,7 @@ class Profile extends Component {
                 console.log(err)
             })
         } else if (status === 0) {
-            axios.post('/email/send', {"email": email, "subject": unregistered,
+            axiosInstance.post('/email/send', {"email": email, "subject": unregistered,
                 // eslint-disable-next-line no-useless-concat
                 "text":"Colaborador: "+ keycloak.idTokenParsed.name +'\n' + "Correo: " + keycloak.idTokenParsed.email + '\n' + "Mensaje: " + obj.state.message}).then((res) =>{
                 Swal.fire({
@@ -242,7 +248,7 @@ class Profile extends Component {
     }
     updateSkills(){
         const obj =this;
-        axios.post('/resource/users',{
+        axiosInstance.post('/resource/users',{
             id: obj.state.id, 
             email: obj.state.email, 
             full_name: obj.state.full_name, 

@@ -7,11 +7,19 @@ import {
     EditFilled,
     PlusOutlined
 } from '@ant-design/icons';
+import config from "../../config/config";
+import https from 'https';
 const axios = require('axios').default;
+axios.defaults.baseURL = config.backURL;
+const axiosInstance = axios.create({
+    httpsAgent: new https.Agent({  
+      rejectUnauthorized: false
+    })
+  });
 
 async function getData() {
     let groups = []
-    await axios.get('/resource/groups')
+    await axiosInstance.get('/resource/groups')
         .then(async function (response) {
             // handle success
             for (let i = 0; i <  response.data.length; i++) {
@@ -87,7 +95,7 @@ const Groups = () => {
         })
             .then((willDelete) => {
                 if (willDelete.value) {
-                    axios.delete('resource/groups/'+id)
+                    axiosInstance.delete('resource/groups/'+id)
                         .then( function (response) {
                             if(response.data === "ERROR"){
                                 Swal.fire({
@@ -129,7 +137,7 @@ const Groups = () => {
         ]).then((result) => {
             if (result.value) {
                 const answers = (result.value)
-                axios.put('resource/groups', {
+                axiosInstance.put('resource/groups', {
                     name: answers[0],
                     description: answers[1]
                 })
@@ -173,7 +181,7 @@ const Groups = () => {
         ]).then((result) => {
             if (result.value) {
                 const answers = (result.value)
-                axios.post('resource/groups', {
+                axiosInstance.post('resource/groups', {
                     id: id,
                     name: answers[0],
                     description: answers[1]
