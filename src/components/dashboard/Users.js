@@ -179,6 +179,7 @@ const Users = () =>  {
         ]).then((result) => {
             if (result.value) {
                 const answers = (result.value)
+                console.log(answers)
                 axiosInstance.put('resource/users', {
                     email: answers[1],
                     full_name: answers[0],
@@ -265,6 +266,7 @@ const Users = () =>  {
         ]).then((result) => {
             if (result.value) {
                 const answers = (result.value)
+                console.log(answers)
                 axiosInstance.post('resource/users', {
                     id: id,
                     email: answers[1],
