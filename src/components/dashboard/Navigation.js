@@ -10,7 +10,7 @@ import UsersTable from "./Users";
 import Skills from "./Skills";
 import Categories from "./Categories";
 import Groups from "./Groups";
-
+import keycloak from '../../config/keycloak';
 // Icons
 import {
     UserOutlined,
@@ -31,7 +31,10 @@ class SiderDemo extends React.Component {
         collapsed: false,
         selected: 1
     };
-
+    logout() {
+        this.props.history.push('/');
+        keycloak.logout();
+      }
     render() {
         return (
             <Layout>
@@ -51,7 +54,7 @@ class SiderDemo extends React.Component {
                         <Menu.Item key="2" icon={<BarChartOutlined />}  onClick={() => this.setState({selected: 2})} className="customclass">
                             Habilidades
                         </Menu.Item>
-                        <Menu.Item key="5" icon={<LogoutOutlined />} className="customclass">
+                        <Menu.Item key="5" icon={<LogoutOutlined />} className="customclass" onClick={ () => this.logout() }>
                             Salir
                         </Menu.Item>
                     </Menu>
