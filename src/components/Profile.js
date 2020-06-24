@@ -61,13 +61,11 @@ class Profile extends Component {
     this.charge();
     }
     addUserSkill(index,lvl, cat){
-        console.log(index,lvl, cat)
         const skills= this.state.skills.filter(item => item.title == cat);
         const name = skills[0].skills[index];
         const id = skills[0].ids[index];
         const indexInUser = this.state.userSkill.ids.map( (element,i)=> element == id ? i : null).filter((el)=>el!=null)
         let result = this.state.userSkill;
-        console.log("indexUser:"+indexInUser.length!=0)
         if(indexInUser.length!=0){
             result.lvls[indexInUser[0]] = lvl
         }else{
