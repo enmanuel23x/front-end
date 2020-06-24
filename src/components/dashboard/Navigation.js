@@ -37,7 +37,6 @@ class SiderDemo extends React.Component {
         selected: 1
     };
     logout() {
-        this.props.history.push('/');
         keycloak.logout();
       }
     render() {
