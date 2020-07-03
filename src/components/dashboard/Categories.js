@@ -84,7 +84,7 @@ const Categories = () => {
             render: text => <a>{text}</a>,
         },
         {
-            title: 'Descripcion',
+            title: 'Descripción',
             className: 'description',
             dataIndex: 'description'
         },
@@ -137,7 +137,7 @@ const Categories = () => {
             html:
                 '<form id="edit">'+
               '<div class="form-group"><label for="exampleInputEmail1">Nombre de la Categoría</label><input  class="form-control" type="text" name="t1" id="t1" placeholder="Nombre de la Categoría" value="'+record.name+'"></div>' +
-              '<div class="form-group"><label for="exampleInputEmail1">Descripcion de la Categoría</label><input  class="form-control"input type="text" name="t2" id="t2" placeholder="Descripcion de la Categoría" value="'+record.description+'"></div>'+
+              '<div class="form-group"><label for="exampleInputEmail1">Descripción de la Categoría</label><input  class="form-control"input type="text" name="t2" id="t2" placeholder="Descripción de la Categoría" value="'+record.description+'"></div>'+
               '<table class="table"><thead class="thead-dark"><tr><th scope="col">Selección</th><th scope="col">Gerencia</th></tr></thead><tbody>'+
               htmlChecks
               +'</tbody></table></form>',
@@ -186,7 +186,7 @@ const Categories = () => {
             html:
                 '<form id="create">'+
               '<div class="form-group"><label for="exampleInputEmail1">Nombre de la Categoría</label><input  class="form-control" type="text" name="t1" id="t1" placeholder="Nombre de la Categoría"></div>' +
-              '<div class="form-group"><label for="exampleInputEmail1">Descripcion de la Categoría</label><input  class="form-control"input type="text" name="t2" id="t2" placeholder="Descripcion de la Categoría"></div>'+
+              '<div class="form-group"><label for="exampleInputEmail1">Descripción de la Categoría</label><input  class="form-control"input type="text" name="t2" id="t2" placeholder="Descripción de la Categoría"></div>'+
               '<table class="table"><thead class="thead-dark"><tr><th scope="col">Selección</th><th scope="col">Gerencia</th></tr></thead><tbody>'+
               htmlChecks
               +'</tbody></table></form>',
