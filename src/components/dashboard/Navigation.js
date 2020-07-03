@@ -50,13 +50,13 @@ class SiderDemo extends React.Component {
                             Usuarios
                         </Menu.Item>
                         <Menu.Item key="4" icon={<AppstoreOutlined />} onClick={() => this.setState({selected: 4})} className="customclass">
-                            Grupos
+                            Gerencia
                         </Menu.Item>
                         <Menu.Item key="3" icon={<ApartmentOutlined />} onClick={() => this.setState({selected: 3})} className="customclass">
-                            Categorias
+                            Categorías
                         </Menu.Item>
                         <Menu.Item key="2" icon={<BarChartOutlined />}  onClick={() => this.setState({selected: 2})} className="customclass">
-                            Habilidades
+                            Conocimientos
                         </Menu.Item>
                         <Menu.Item key="5" icon={<LogoutOutlined />} className="customclass" onClick={ () => this.logout() }>
                             Salir
@@ -66,7 +66,7 @@ class SiderDemo extends React.Component {
                 <Layout className="site-layout">
                     <Header className="site-layout-background" style={{ padding: 0 }}>
                         {/* eslint-disable-next-line react/jsx-no-undef */}
-                        <Title level={4} style={{paddingTop: "20px", paddingLeft:"20px", paddingBottom:"20px"}}>Mapeo de conocimiento - Panel Administrativo</Title>
+                        <Title level={4} style={{paddingTop: "20px", paddingLeft:"20px", paddingBottom:"20px"}}>Registro de conocimientos - Panel Administrativo</Title>
                     </Header>
                     <Content
                         className="site-layout-background"

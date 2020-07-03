@@ -32,7 +32,7 @@ class Pagination extends Component {
           parent=props.obj
         }
         lvl(index, e){
-          var change = {};
+          var change = this.state.lvls;
           change[index] = e.target.value;
           this.setState({lvls:change});
         }

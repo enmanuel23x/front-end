@@ -83,7 +83,7 @@ const Groups = () => {
     ];
     function deleteRecord(id, name){
         Swal.fire({
-            title: "¿Quieres eliminar el grupo "+name+"?",
+            title: "¿Quieres eliminar La gerencia "+name+"?",
             text: "Una vez eliminado no se podra recuperar",
             icon: "warning",
             buttons: true,
@@ -98,21 +98,21 @@ const Groups = () => {
                         .then( function (response) {
                             if(response.data === "ERROR"){
                                 Swal.fire({
-                                    title:"El grupo no puede ser eliminado!",
-                                    text: "Por favor, verifique que el grupo no este en\n"+
-                                          "uso en alguna categoria registrada",
+                                    title:"La gerencia no puede ser eliminada!",
+                                    text: "Por favor, verifique que La gerencia no este en\n"+
+                                          "uso en alguna Categoría registrada",
                                     icon: "warning",
                                 });
                             }else{
                                 Swal.fire({
-                                    title:"El grupo fue eliminado!",
+                                    title:"La gerencia fue eliminada!",
                                     icon: "success",
                                 });
                             }
                             fillTable()
                             });
                 } else {
-                    Swal.fire("El grupo no fue eliminado!");
+                    Swal.fire("La gerencia no fue eliminada!");
                 }
             });
     }
@@ -212,7 +212,7 @@ const Groups = () => {
                 type="primary"
                 style={{ backgroundColor: "#08979c", borderColor: "#08979c" }}
             >
-                Agregar nuevo grupo <PlusOutlined/>
+                Agregar gerencia <PlusOutlined/>
             </Button>
             <Divider/>
             <Table
@@ -220,7 +220,6 @@ const Groups = () => {
                 dataSource={data}
                 // rowSelection={rowSelection}
                 bordered
-                title={() => 'Grupos de Gerencia'}
             />
         </div>
 

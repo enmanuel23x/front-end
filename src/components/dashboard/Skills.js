@@ -81,7 +81,7 @@ const Skills = () => {
 
     function deleteRecord(id, name){
         Swal.fire({
-            title: "¿Quieres eliminar la habilidad "+name+"?",
+            title: "¿Quieres eliminar el conocimiento "+name+"?",
             text: "Una vez eliminado no se podra recuperar",
             icon: "warning",
             buttons: true,
@@ -93,7 +93,7 @@ const Skills = () => {
             .then((willDelete) => {
                 if (willDelete.value) {
                     Swal.fire({
-                        title:"La habilidad fue eliminada!",
+                        title:"el conocimiento fue eliminado!",
                         icon: "success",
                     })
                         .then((data) =>{
@@ -103,7 +103,7 @@ const Skills = () => {
                                 });
                         });
                 } else {
-                    Swal.fire("La habilidad no fue eliminada!");
+                    Swal.fire("el conocimiento no fue eliminado!");
                 }
             });
     }
@@ -139,7 +139,7 @@ const Skills = () => {
         }).queue([
             {
                 title: 'Conocimiento',
-                text: 'Ingrese la habilidad asociada'
+                text: 'Ingrese el conocimiento asociado'
             },
             {
                 title: 'Categoria',
@@ -205,7 +205,7 @@ const Skills = () => {
         }).queue([
             {
                 title: 'Conocimiento',
-                text: 'Ingrese la habilidad asociada',
+                text: 'Ingrese el conocimiento asociado',
                 inputValue: name
             },
             {
@@ -252,7 +252,7 @@ const Skills = () => {
                 type="primary"
                 style={{ backgroundColor: "#08979c", borderColor: "#08979c" }}
             >
-                Agregar nuevo conocimiento <PlusOutlined/>
+                Agregar conocimiento <PlusOutlined/>
             </Button>
             <Divider/>
             <Table

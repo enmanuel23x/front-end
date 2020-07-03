@@ -70,7 +70,7 @@ const Users = () =>  {
             dataIndex: 'email',
         },
         {
-            title: 'Grupo',
+            title: 'Gerencia',
             dataIndex: 'group_name',
         },
         {
@@ -164,7 +164,7 @@ const Users = () =>  {
             },
             {
                 title: 'Gerencia',
-                text: 'Elija el grupo asociado',
+                text: 'Elija la gerencia asociada',
                 input: 'select',
                 inputOptions: groups
             },
@@ -248,7 +248,7 @@ const Users = () =>  {
             },
             {
                 title: 'Gerencia',
-                text: 'Elija el grupo asociado',
+                text: 'Elija la gerencia asociada',
                 input: 'select',
                 inputValue: group_id,
                 inputOptions: groups
@@ -302,7 +302,7 @@ const Users = () =>  {
                 type="primary"
                 style={{ backgroundColor: "#08979c", borderColor: "#08979c" }}
             >
-                Agregar Usuario Nuevo <PlusOutlined />
+                Agregar usuario <PlusOutlined />
             </Button>
     <Divider/>
             <Table

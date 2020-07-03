@@ -89,7 +89,7 @@ const Categories = () => {
             dataIndex: 'description'
         },
         {
-            title: 'Grupos',
+            title: 'Gerencias',
             key: 'tags',
             dataIndex: 'tags',
             render: tags => (
@@ -133,11 +133,11 @@ const Categories = () => {
             :
             '<tr><th scope="row"><input type="checkbox" name="'+element.id+'" id="'+element.id+'" /></th><td>'+element.name+'</td></tr>')).join(",");
         const { value: formValues } = await Swal.fire({
-            title: 'Crear categoria',
+            title: 'Crear Categoría',
             html:
                 '<form id="edit">'+
-              '<div class="form-group"><label for="exampleInputEmail1">Nombre de la categoria</label><input  class="form-control" type="text" name="t1" id="t1" placeholder="Nombre de la categoria" value="'+record.name+'"></div>' +
-              '<div class="form-group"><label for="exampleInputEmail1">Descripcion de la categoria</label><input  class="form-control"input type="text" name="t2" id="t2" placeholder="Descripcion de la categoria" value="'+record.description+'"></div>'+
+              '<div class="form-group"><label for="exampleInputEmail1">Nombre de la Categoría</label><input  class="form-control" type="text" name="t1" id="t1" placeholder="Nombre de la Categoría" value="'+record.name+'"></div>' +
+              '<div class="form-group"><label for="exampleInputEmail1">Descripcion de la Categoría</label><input  class="form-control"input type="text" name="t2" id="t2" placeholder="Descripcion de la Categoría" value="'+record.description+'"></div>'+
               '<table class="table"><thead class="thead-dark"><tr><th scope="col">Selección</th><th scope="col">Gerencia</th></tr></thead><tbody>'+
               htmlChecks
               +'</tbody></table></form>',
@@ -168,7 +168,7 @@ const Categories = () => {
                     Swal.fire({
                         position: 'top-end',
                         icon: 'success',
-                        title: 'Categoria editada',
+                        title: 'Categoría editada',
                         showConfirmButton: false,
                         timer: 1500
                     })
@@ -182,11 +182,11 @@ const Categories = () => {
     async function createCategorie(){
         const htmlChecks = await groups.map( (element) => '<tr><th scope="row"><input type="checkbox" name="'+element.id+'" id="'+element.id+'" checked="false" /></th><td>'+element.name+'</td></tr>').join(",");
         const { value: formValues } = await Swal.fire({
-            title: 'Crear categoria',
+            title: 'Crear Categoría',
             html:
                 '<form id="create">'+
-              '<div class="form-group"><label for="exampleInputEmail1">Nombre de la categoria</label><input  class="form-control" type="text" name="t1" id="t1" placeholder="Nombre de la categoria"></div>' +
-              '<div class="form-group"><label for="exampleInputEmail1">Descripcion de la categoria</label><input  class="form-control"input type="text" name="t2" id="t2" placeholder="Descripcion de la categoria"></div>'+
+              '<div class="form-group"><label for="exampleInputEmail1">Nombre de la Categoría</label><input  class="form-control" type="text" name="t1" id="t1" placeholder="Nombre de la Categoría"></div>' +
+              '<div class="form-group"><label for="exampleInputEmail1">Descripcion de la Categoría</label><input  class="form-control"input type="text" name="t2" id="t2" placeholder="Descripcion de la Categoría"></div>'+
               '<table class="table"><thead class="thead-dark"><tr><th scope="col">Selección</th><th scope="col">Gerencia</th></tr></thead><tbody>'+
               htmlChecks
               +'</tbody></table></form>',
@@ -217,7 +217,7 @@ const Categories = () => {
                     Swal.fire({
                         position: 'top-end',
                         icon: 'success',
-                        title: 'Nueva Categoria Añadida',
+                        title: 'Nueva Categoría Añadida',
                         showConfirmButton: false,
                         timer: 1500
                     })
@@ -230,7 +230,7 @@ const Categories = () => {
     }
     function deleteRecord(id, name){
         Swal.fire({
-            title: "¿Quieres eliminar la categoria "+name+"?",
+            title: "¿Quieres eliminar la Categoría "+name+"?",
             text: "Una vez eliminado no se podra recuperar",
             icon: "warning",
             buttons: true,
@@ -245,21 +245,21 @@ const Categories = () => {
                         .then( function (response) {
                             if(response.data == "ERROR"){
                                 Swal.fire({
-                                    title:"La categoria no puede ser eliminado!",
-                                    text: "Por favor, verifique que la categoria no este en\n"+
-                                          "uso en alguna habilidad registrada",
+                                    title:"La Categoría no puede ser eliminado!",
+                                    text: "Por favor, verifique que la Categoría no este en\n"+
+                                          "uso en algun conocimiento registrado",
                                     icon: "warning",
                                 });
                             }else{
                                 Swal.fire({
-                                    title:"La categoria fue eliminado!",
+                                    title:"La Categoría fue eliminado!",
                                     icon: "success",
                                 });
                             }
                             fillTable()
                             });
                 } else {
-                    Swal.fire("La categoria no fue eliminada!");
+                    Swal.fire("La Categoría no fue eliminada!");
                 }
             });
     }
@@ -270,7 +270,7 @@ const Categories = () => {
                 type="primary"
                 style={{ backgroundColor: "#08979c", borderColor: "#08979c" }}
             >
-                Agregar Nueva Categoria <PlusOutlined/>
+                Agregar categoría <PlusOutlined/>
             </Button>
             <Divider/>
             <Table
