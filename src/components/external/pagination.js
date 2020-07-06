@@ -57,7 +57,8 @@ class Pagination extends Component {
         handleClick(event) {
           let listid = Number(event.target.id);
           this.setState({
-            currentPage: listid
+            currentPage: listid,
+            lvls: []
           });
           this.setPrevAndNextBtnClass(listid);
         }
@@ -118,7 +119,7 @@ class Pagination extends Component {
           return <tr key={index}>
           <th scope="row">{skill}</th>
           <th scope="row">
-            <select className="form-control" onChange={this.lvl.bind(this, index)} defaultValue={'DEFAULT'}>
+            <select className="form-control" onChange={this.lvl.bind(this, index)} value={this.state.lvls == [] ? 'DEFAULT' : this.state.lvls[index]} defaultValue={'DEFAULT'}>
               <option value='DEFAULT' disabled>-- Seleccione un nivel --</option>
               <option value="Básico">Básico</option>
               <option value="Medio">Medio</option>

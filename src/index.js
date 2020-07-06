@@ -6,7 +6,6 @@ import './assets/css/index.css';
 import App from './App';
 //Get the keycloak configuration
 import keycloak from './config/keycloak';
-console.log(keycloak)
 //Initialization of the keycloak instance
 keycloak.init({ onLoad: 'login-required', promiseType: 'native' }).then((authenticated) => {
     if (!authenticated) {
