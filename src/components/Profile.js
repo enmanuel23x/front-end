@@ -190,8 +190,8 @@ class Profile extends Component {
         
     }
     submitForm(e, status){
-        let lack_skill = "Mapeo Conocimientos: Notificación de falta de habilidad";
-        let unregistered = "Mapeo Conocimientos: Notificación para creación de usuario";
+        let lack_skill = "Registro de conocimientos: Solicitud de incluir conocimiento";
+        let unregistered = "Registro de conocimientos: Notificación para agregar usuario";
         e.preventDefault();
         let obj = this;
         if (status === 1){
