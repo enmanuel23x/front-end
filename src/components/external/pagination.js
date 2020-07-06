@@ -119,7 +119,8 @@ class Pagination extends Component {
           return <tr key={index}>
           <th scope="row">{skill}</th>
           <th scope="row">
-            <select className="form-control" onChange={this.lvl.bind(this, index)} value={this.state.lvls == [] ? 'DEFAULT' : this.state.lvls[index]} defaultValue={'DEFAULT'}>
+            
+            <select className="form-control" onChange={this.lvl.bind(this, index)} value={this.state.lvls[index] == undefined ? 'DEFAULT' : this.state.lvls[index]}>
               <option value='DEFAULT' disabled>-- Seleccione un nivel --</option>
               <option value="Básico">Básico</option>
               <option value="Medio">Medio</option>
