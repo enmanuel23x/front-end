@@ -37,9 +37,11 @@ class Pagination extends Component {
           this.setState({lvls:change});
         }
         validate(id){
-          if(parent.state.userSkill!=undefined){
+          if(parent.state.userSkill.ids.length!=0){
             const exist= parent.state.userSkill.ids.includes(id)
             return exist;
+          }else{
+            return false;
           }
         }
         add(index,ilvl){
@@ -128,8 +130,8 @@ class Pagination extends Component {
             </select>
             </th>
           <th scope="row">
-          {!(this.validate(skills.ids[index])) && <button className="btn btn-dark" value={index} onClick={() => this.add(index+((currentPage-1)*this.state.skillsPerPage), index)}>Agregar</button>}
-          {(this.validate(skills.ids[index])) && <button className="btn btn-info" value={index} onClick={() => this.add(index+((currentPage-1)*this.state.skillsPerPage), index)}>Actualizar</button>}    
+          {!(this.validate(skills.ids[index+((currentPage-1)*this.state.skillsPerPage)])) && <button className="btn btn-dark" value={index} onClick={() => this.add(index+((currentPage-1)*this.state.skillsPerPage), index)}>Agregar</button>}
+          {(this.validate(skills.ids[index+((currentPage-1)*this.state.skillsPerPage)])) && <button className="btn btn-info" value={index} onClick={() => this.add(index+((currentPage-1)*this.state.skillsPerPage), index)}>Actualizar</button>}    
           </th>
       </tr>;
         });
