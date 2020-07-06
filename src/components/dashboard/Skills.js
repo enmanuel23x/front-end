@@ -12,7 +12,7 @@ import https from 'https';
 const axios = require('axios').default;
 axios.defaults.baseURL = config.backURL;
 const axiosInstance = axios.create({
-    httpsAgent: new https.Agent({  
+    httpsAgent: new https.Agent({
       rejectUnauthorized: false
     })
   });
@@ -258,6 +258,9 @@ const Skills = () => {
             <Table
                 columns={columns}
                 dataSource={data}
+                pagination={{            
+                  pageSize: 6
+                }}
                 bordered
             />
         </div>

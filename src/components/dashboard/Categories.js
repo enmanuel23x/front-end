@@ -12,7 +12,7 @@ import https from 'https';
 const axios = require('axios').default;
 axios.defaults.baseURL = config.backURL;
 const axiosInstance = axios.create({
-    httpsAgent: new https.Agent({  
+    httpsAgent: new https.Agent({
       rejectUnauthorized: false
     })
   });
@@ -128,7 +128,7 @@ const Categories = () => {
         const checks = await groups.map( (element) => {
             return record.tags.includes(parseInt(element.id))
         });
-        const htmlChecks = await groups.map( (element,i) => (checks[i] ? 
+        const htmlChecks = await groups.map( (element,i) => (checks[i] ?
             '<tr><th scope="row"><input type="checkbox" name="'+element.id+'" id="'+element.id+'" checked/></th><td>'+element.name+'</td></tr>'
             :
             '<tr><th scope="row"><input type="checkbox" name="'+element.id+'" id="'+element.id+'" /></th><td>'+element.name+'</td></tr>')).join(",");
@@ -159,7 +159,7 @@ const Categories = () => {
                 return result;
             }
           })
-          
+
           if (formValues) {
             const name = formValues[0], description = formValues[1];
             const group_ids = JSON.stringify(groups.map( (group,i)=> formValues[2+i] ? group.id : null).filter( (el) => el != null ));
@@ -208,7 +208,7 @@ const Categories = () => {
                 return result;
             }
           })
-          
+
           if (formValues) {
             const name = formValues[0], description = formValues[1];
             const group_ids = JSON.stringify(groups.map( (group,i)=> formValues[2+i] ? group.id : null).filter( (el) => el != null ));
@@ -276,6 +276,9 @@ const Categories = () => {
             <Table
                 columns={columns}
                 dataSource={data}
+                pagination={{
+                  pageSize: 6
+                }}
                 bordered
             />
         </div>
