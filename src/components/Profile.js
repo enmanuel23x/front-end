@@ -8,6 +8,7 @@ import Swal from 'sweetalert2'
 import timeZoneConverter from 'time-zone-converter';
 import config from "../config/config";
 import https from 'https';
+const utils = require('../config/utils')
 const axios = require('axios').default;
 axios.defaults.baseURL = config.backURL;
 const axiosInstance = axios.create({
@@ -75,9 +76,12 @@ class Profile extends Component {
         }
         this.setState({userSkill: result})
     }
-    loadSkills(group){
+    async loadSkills(group){
         let obj=this;
-        axiosInstance.get('/resource/skills/'+group).then(function (skills) {
+        axiosInstance.get('/resource/skills/'+group,
+        {
+          headers: { 'access-token': await utils.default.getTokenApi() }
+        }).then(function (skills) {
           let custom =[], i = 0, prevCat = ""
           skills.data.forEach(element => {
               if(element.category_name == prevCat){
@@ -99,11 +103,14 @@ class Profile extends Component {
           console.error(error)
       });
       }
-    charge(){//en progreso
+    async charge(){
       let days = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
       let obj=this;
       let email=keycloak.idTokenParsed.email;
-      axiosInstance.get('/resource/users/'+email).then(function (res) {
+      axiosInstance.get('/resource/users/'+email,
+      {
+        headers: { 'access-token': await utils.default.getTokenApi() }
+      }).then(function (res) {
         if(res.data.length==0){
             obj.setState(
                 {email:email,
@@ -130,10 +137,13 @@ class Profile extends Component {
           console.error(error)
       });
 
-      function getDate(){
+      async function getDate(){
           let create = false;
-          axiosInstance.post('bd/data', {email: keycloak.idTokenParsed.email})
-              .then((res) => {
+          axiosInstance.post('bd/data', {email: keycloak.idTokenParsed.email},
+          {
+            headers: { 'access-token': await utils.default.getTokenApi() }
+          })
+              .then(async (res) => {
                 if(res.data.length == 0){
                     create = true;
                 }else{
@@ -148,7 +158,10 @@ class Profile extends Component {
                     obj.state.first_conn = first_connection;
                     obj.state.last_conn = last_connection;
                     }
-                  axiosInstance.post('bd/update', {email: keycloak.idTokenParsed.email, create: create}).then(response => {
+                  axiosInstance.post('bd/update', {email: keycloak.idTokenParsed.email, create: create},
+                  {
+                    headers: { 'access-token': await utils.default.getTokenApi() }
+                  }).then(response => {
                     if(create){
                         getDate()
                     }else{
@@ -189,7 +202,7 @@ class Profile extends Component {
         }
         
     }
-    submitForm(e, status){
+    async submitForm(e, status){
         let lack_skill = "Registro de conocimientos: Solicitud de incluir conocimiento";
         let unregistered = "Registro de conocimientos: Notificación para agregar usuario";
         e.preventDefault();
@@ -197,7 +210,10 @@ class Profile extends Component {
         if (status === 1){
             axiosInstance.post('/email/send', {"email": email, "subject": lack_skill,
                 // eslint-disable-next-line no-useless-concat
-                "text":"Colaborador: "+ keycloak.idTokenParsed.name +'\n' + "Correo: " + keycloak.idTokenParsed.email + '\n' + "Mensaje: " + obj.state.message}).then((res) =>{
+                "text":"Colaborador: "+ keycloak.idTokenParsed.name +'\n' + "Correo: " + keycloak.idTokenParsed.email + '\n' + "Mensaje: " + obj.state.message},
+                {
+                  headers: { 'access-token': await utils.default.getTokenApi() }
+                }).then((res) =>{
                 Swal.fire({
                     icon: 'success',
                     title: 'Mensaje enviado!',
@@ -219,7 +235,10 @@ class Profile extends Component {
         } else if (status === 0) {
             axiosInstance.post('/email/send', {"email": email, "subject": unregistered,
                 // eslint-disable-next-line no-useless-concat
-                "text":"Colaborador: "+ keycloak.idTokenParsed.name +'\n' + "Correo: " + keycloak.idTokenParsed.email + '\n' + "Mensaje: " + obj.state.message}).then((res) =>{
+                "text":"Colaborador: "+ keycloak.idTokenParsed.name +'\n' + "Correo: " + keycloak.idTokenParsed.email + '\n' + "Mensaje: " + obj.state.message},
+                {
+                  headers: { 'access-token': await utils.default.getTokenApi() }
+                }).then((res) =>{
                 Swal.fire({
                     icon: 'success',
                     title: 'Mensaje enviado!',
@@ -250,7 +269,7 @@ class Profile extends Component {
         const result = {ids: this.state.userSkill.ids.filter( (item, i) => i != index), lvls: this.state.userSkill.lvls.filter( (item, i) => i != index), names: this.state.userSkill.names.filter( (item, i) => i != index)}
         this.setState({userSkill: result})
     }
-    updateSkills(){
+    async updateSkills(){
         const obj =this;
         axiosInstance.post('/resource/users',{
             id: obj.state.id, 
@@ -260,6 +279,9 @@ class Profile extends Component {
             skills: JSON.stringify(obj.state.userSkill),
             sede: obj.state.sede,
             cargo: obj.state.cargo
+        },
+        {
+          headers: { 'access-token': await utils.default.getTokenApi() }
         })
         .then(function (res) {
             Swal.fire({

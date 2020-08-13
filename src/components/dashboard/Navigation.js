@@ -19,15 +19,6 @@ import {
     AppstoreOutlined,
     LogoutOutlined
 } from '@ant-design/icons';
-import config from "../../config/config";
-import https from 'https';
-const axios = require('axios').default;
-axios.defaults.baseURL = config.backURL;
-const axiosInstance = axios.create({
-    httpsAgent: new https.Agent({  
-      rejectUnauthorized: false
-    })
-  });
 const { Title } = Typography;
 const { Header, Sider, Content } = Layout;
 

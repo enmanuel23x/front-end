@@ -9,6 +9,7 @@ import {
 } from '@ant-design/icons';
 import config from "../../config/config";
 import https from 'https';
+const utils = require('../../config/utils')
 const axios = require('axios').default;
 axios.defaults.baseURL = config.backURL;
 const axiosInstance = axios.create({
@@ -19,7 +20,10 @@ const axiosInstance = axios.create({
 
 async function getData() {
     let skills = []
-    await axiosInstance.get('/resource/tableSkills')
+    await axiosInstance.get('/resource/tableSkills',
+    {
+      headers: { 'access-token': await utils.default.getTokenApi() }
+    })
         .then(async function (response) {
             // handle success
             for (let i = 0; i <  response.data.length; i++) {
@@ -36,7 +40,6 @@ async function getData() {
             console.log(error);
         })
         .then(function () {
-            console.log("Data successfully fetched")
             // always executed
         });
     return skills
@@ -96,8 +99,11 @@ const Skills = () => {
                         title:"el conocimiento fue eliminado!",
                         icon: "success",
                     })
-                        .then((data) =>{
-                            axiosInstance.delete('resource/skills/'+id)
+                        .then(async (data) =>{
+                            axiosInstance.delete('resource/skills/'+id,
+                            {
+                              headers: { 'access-token': await utils.default.getTokenApi() }
+                            })
                                 .then( function (response) {
                                     fillTable()
                                 });
@@ -111,7 +117,10 @@ const Skills = () => {
 
     async function createSkill(){
         let skills = {}
-        await axiosInstance.get('/resource/categories')
+        await axiosInstance.get('/resource/categories',
+        {
+          headers: { 'access-token': await utils.default.getTokenApi() }
+        })
             .then(async function (response) {
                 // handle success
                 for (let i = 0; i <  response.data.length; i++) {
@@ -123,7 +132,6 @@ const Skills = () => {
                 console.log(error);
             })
             .then(function () {
-                console.log("Skills fetched")
                 // always executed
             });
 
@@ -147,16 +155,18 @@ const Skills = () => {
                 input: 'select',
                 inputOptions: skills
             },
-        ]).then((result) => {
+        ]).then(async (result) => {
             if (result.value) {
                 const answers = (result.value)
 
                 axiosInstance.put('resource/skills', {
                     name: answers[0],
                     category_id: parseInt(answers[1])
+                },
+                {
+                  headers: { 'access-token': await utils.default.getTokenApi() }
                 })
                     .then(response => {
-                        // console.log(response);
                         fillTable()
                     })
                     .catch(error => {
@@ -175,9 +185,12 @@ const Skills = () => {
     }
 
 
-    function updateSkill(id, name, category) {
+    async function updateSkill(id, name, category) {
         let skills = {}
-        axiosInstance.get('/resource/categories')
+        axiosInstance.get('/resource/categories',
+        {
+          headers: { 'access-token': await utils.default.getTokenApi() }
+        })
             .then(async function (response) {
                 // handle success
                 for (let i = 0; i <  response.data.length; i++) {
@@ -189,7 +202,6 @@ const Skills = () => {
                 console.log(error);
             })
             .then(function () {
-                console.log("Skills fetched")
                 // always executed
             });
 
@@ -215,7 +227,7 @@ const Skills = () => {
                 inputOptions: skills,
                 inputValue: category
             },
-        ]).then((result) => {
+        ]).then(async (result) => {
             if (result.value) {
                 const answers = (result.value)
 
@@ -223,9 +235,11 @@ const Skills = () => {
                     id: id,
                     name: answers[0],
                     category_id: parseInt(answers[1])
+                },
+                {
+                  headers: { 'access-token': await utils.default.getTokenApi() }
                 })
                     .then(response => {
-                        // console.log(response);
                         fillTable()
                     })
                     .catch(error => {

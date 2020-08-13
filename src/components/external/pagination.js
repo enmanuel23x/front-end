@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 /* eslint-disable import/first */
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import Skills from '../dashboard/Skills';
 let parent
 const swal = withReactContent(Swal);
 class Pagination extends Component {

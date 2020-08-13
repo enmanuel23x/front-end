@@ -9,6 +9,7 @@ import {
 } from '@ant-design/icons';
 import config from "../../config/config";
 import https from 'https';
+const utils = require('../../config/utils')
 const axios = require('axios').default;
 axios.defaults.baseURL = config.backURL;
 const axiosInstance = axios.create({
@@ -20,7 +21,10 @@ const axiosInstance = axios.create({
 
 async function getData() {
     let categories = []
-    await axiosInstance.get('/resource/categories')
+    await axiosInstance.get('/resource/categories',
+    {
+      headers: { 'access-token': await utils.default.getTokenApi() }
+    })
         .then(async function (response) {
             // handle success
             for (let i = 0; i <  response.data.length; i++) {
@@ -37,14 +41,16 @@ async function getData() {
             console.log(error);
         })
         .then(function () {
-            console.log("Data successfully fetched")
             // always executed
         });
     return categories
 }
 async function getData2() {
     let groups = []
-    await axiosInstance.get('/resource/groups')
+    await axiosInstance.get('/resource/groups',
+    {
+      headers: { 'access-token': await utils.default.getTokenApi() }
+    })
         .then(async function (response) {
             groups = await response.data;
         })
@@ -53,7 +59,6 @@ async function getData2() {
             console.log(error);
         })
         .then(function () {
-            console.log("Data successfully fetched")
             // always executed
         });
     return groups
@@ -163,7 +168,10 @@ const Categories = () => {
           if (formValues) {
             const name = formValues[0], description = formValues[1];
             const group_ids = JSON.stringify(groups.map( (group,i)=> formValues[2+i] ? group.id : null).filter( (el) => el != null ));
-            axiosInstance.post('resource/categories', {id ,name, description, group_ids})
+            axiosInstance.post('resource/categories', {id ,name, description, group_ids},
+            {
+              headers: { 'access-token': await utils.default.getTokenApi() }
+            })
                 .then(response => {
                     Swal.fire({
                         position: 'top-end',
@@ -212,7 +220,10 @@ const Categories = () => {
           if (formValues) {
             const name = formValues[0], description = formValues[1];
             const group_ids = JSON.stringify(groups.map( (group,i)=> formValues[2+i] ? group.id : null).filter( (el) => el != null ));
-            axiosInstance.put('resource/categories', {name, description, group_ids})
+            axiosInstance.put('resource/categories', {name, description, group_ids},
+            {
+              headers: { 'access-token': await utils.default.getTokenApi() }
+            })
                 .then(response => {
                     Swal.fire({
                         position: 'top-end',
@@ -239,9 +250,12 @@ const Categories = () => {
             cancelButtonText: 'Cancelar',
             dangerMode: true,
         })
-            .then((willDelete) => {
+            .then(async (willDelete) => {
                 if (willDelete.value) {
-                    axiosInstance.delete('resource/categories/'+id)
+                    axiosInstance.delete('resource/categories/'+id,
+                    {
+                      headers: { 'access-token': await utils.default.getTokenApi() }
+                    })
                         .then( function (response) {
                             if(response.data == "ERROR"){
                                 Swal.fire({

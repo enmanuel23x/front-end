@@ -9,6 +9,7 @@ import {
 } from '@ant-design/icons';
 import config from "../../config/config";
 import https from 'https';
+const utils = require('../../config/utils')
 const axios = require('axios').default;
 axios.defaults.baseURL = config.backURL;
 const axiosInstance = axios.create({
@@ -19,7 +20,10 @@ const axiosInstance = axios.create({
 
 async function getData() {
     let groups = []
-    await axiosInstance.get('/resource/groups')
+    await axiosInstance.get('/resource/groups',
+    {
+      headers: { 'access-token': await utils.default.getTokenApi() }
+    })
         .then(async function (response) {
             // handle success
             for (let i = 0; i <  response.data.length; i++) {
@@ -35,7 +39,6 @@ async function getData() {
             // console.log(error);
         })
         .then(function () {
-            console.log("Data successfully fetched")
             // always executed
         });
     return groups;
@@ -92,9 +95,12 @@ const Groups = () => {
             cancelButtonText: 'Cancelar',
             dangerMode: true,
         })
-            .then((willDelete) => {
+            .then(async (willDelete) => {
                 if (willDelete.value) {
-                    axiosInstance.delete('resource/groups/'+id)
+                    axiosInstance.delete('resource/groups/'+id,
+                    {
+                      headers: { 'access-token': await utils.default.getTokenApi() }
+                    })
                         .then( function (response) {
                             if(response.data === "ERROR"){
                                 Swal.fire({
@@ -134,15 +140,17 @@ const Groups = () => {
                 text: 'Breve descripción',
                 input: 'textarea'
             },
-        ]).then((result) => {
+        ]).then(async (result) => {
             if (result.value) {
                 const answers = (result.value)
                 axiosInstance.put('resource/groups', {
                     name: answers[0],
                     description: answers[1]
+                },
+                {
+                  headers: { 'access-token': await utils.default.getTokenApi() }
                 })
                     .then(response => {
-                        // console.log(response);
                         fillTable()
                     })
                     .catch(error => {
@@ -179,16 +187,18 @@ const Groups = () => {
                 inputValue: description,
                 input: 'textarea'
             },
-        ]).then((result) => {
+        ]).then(async (result) => {
             if (result.value) {
                 const answers = (result.value)
                 axiosInstance.post('resource/groups', {
                     id: id,
                     name: answers[0],
                     description: answers[1]
+                },
+                {
+                  headers: { 'access-token': await utils.default.getTokenApi() }
                 })
                     .then(response => {
-                        // console.log(response);
                         fillTable()
                     })
                     .catch(error => {

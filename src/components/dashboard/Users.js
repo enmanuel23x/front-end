@@ -10,6 +10,7 @@ import {
 } from '@ant-design/icons';
 import config from "../../config/config";
 import https from 'https';
+const utils = require('../../config/utils')
 const axios = require('axios').default;
 axios.defaults.baseURL = config.backURL;
 const axiosInstance = axios.create({
@@ -21,7 +22,10 @@ const axiosInstance = axios.create({
 
 async function getData() {
     let users = []
-    await axiosInstance.get('/resource/tableUser')
+    await axiosInstance.get('/resource/tableUser',
+    {
+      headers: { 'access-token': await utils.default.getTokenApi() }
+    })
         .then(async function (response) {
             // handle success
             for (let i = 0; i <  response.data.length; i++) {
@@ -43,7 +47,6 @@ async function getData() {
         })
         .then(function () {
             // always executed
-            console.log("Data successfully fetched")
 
         });
     return users
@@ -116,8 +119,11 @@ const Users = () =>  {
                         title:"El usuario fue eliminado!",
                         icon: "success",
                     })
-                        .then((data) =>{
-                            axiosInstance.delete('resource/users/'+id)
+                        .then(async (data) =>{
+                            axiosInstance.delete('resource/users/'+id,
+                            {
+                              headers: { 'access-token': await utils.default.getTokenApi() }
+                            })
                                 .then( function (response) {
                                     fillTable()
                                 });
@@ -130,7 +136,10 @@ const Users = () =>  {
 
     async function createUsers(){
         let groups = {}
-        await axiosInstance.get('/resource/groups')
+        await axiosInstance.get('/resource/groups',
+        {
+          headers: { 'access-token': await utils.default.getTokenApi() }
+        })
             .then(async function (response) {
                 // handle success
                 for (let i = 0; i <  response.data.length; i++) {
@@ -142,7 +151,6 @@ const Users = () =>  {
                 console.log(error);
             })
             .then(function () {
-                console.log("Skills fetched")
                 // always executed
             });
         Swal.mixin({
@@ -176,19 +184,20 @@ const Users = () =>  {
                 title: 'Sede',
                 text: 'Sede asociada',
             }
-        ]).then((result) => {
+        ]).then(async (result) => {
             if (result.value) {
                 const answers = (result.value)
-                console.log(answers)
                 axiosInstance.put('resource/users', {
                     email: answers[1],
                     full_name: answers[0],
                     group_id: parseInt(answers[2]),
                     cargo: answers[3],
                     sede: answers[4]
+                },
+                {
+                  headers: { 'access-token': await utils.default.getTokenApi() }
                 })
                     .then(response => {
-                        // console.log(response);
                         fillTable()
                     })
                     .catch(error => {
@@ -210,9 +219,12 @@ const Users = () =>  {
 
     }
 
-    function updateUsers(id, name, email, group_id, skills, cargo, sede){
+    async function updateUsers(id, name, email, group_id, skills, cargo, sede){
         let groups = {}
-        axiosInstance.get('/resource/groups')
+        axiosInstance.get('/resource/groups',
+        {
+          headers: { 'access-token': await utils.default.getTokenApi() }
+        })
             .then(async function (response) {
                 // handle success
                 for (let i = 0; i <  response.data.length; i++) {
@@ -224,7 +236,6 @@ const Users = () =>  {
                 console.log(error);
             })
             .then(function () {
-                console.log("Groups fetched")
                 // always executed
             });
         Swal.mixin({
@@ -263,10 +274,9 @@ const Users = () =>  {
                 text: 'Sede asociada',
                 inputValue: sede
             }
-        ]).then((result) => {
+        ]).then(async (result) => {
             if (result.value) {
                 const answers = (result.value)
-                console.log(answers)
                 axiosInstance.post('resource/users', {
                     id: id,
                     email: answers[1],
@@ -275,9 +285,11 @@ const Users = () =>  {
                     skills: skills,
                     cargo: answers[3],
                     sede: answers[4]
+                },
+                {
+                  headers: { 'access-token': await utils.default.getTokenApi() }
                 })
                     .then(response => {
-                        // console.log(response);
                         fillTable()
                     })
                     .catch(error => {

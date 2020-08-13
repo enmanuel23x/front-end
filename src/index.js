@@ -7,7 +7,7 @@ import App from './App';
 //Get the keycloak configuration
 import keycloak from './config/keycloak';
 //Initialization of the keycloak instance
-keycloak.init({ onLoad: 'login-required', promiseType: 'native' }).then((authenticated) => {
+keycloak.init({ onLoad: 'login-required', promiseType: 'native', checkLoginIframe: false }).then((authenticated) => {
     if (!authenticated) {
         keycloak.init({ onLoad: 'login-required', promiseType: 'native' });
     }else{
