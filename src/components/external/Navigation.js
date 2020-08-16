@@ -5,8 +5,9 @@ import keycloak from "../../config/keycloak"
 class Navigation extends Component {
     constructor(props) {
         super(props);
+        console.log(localStorage.name)
         this.state = {
-            name: keycloak.idTokenParsed.name
+            name: localStorage.name
         }
     }
 

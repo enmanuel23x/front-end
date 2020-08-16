@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom'
-import keycloak from '../../config/keycloak';
 class Logout extends Component {
   constructor(props) {
     super(props)
@@ -8,7 +7,9 @@ class Logout extends Component {
   }
   logout(event) {
     event.preventDefault() 
-    keycloak.logout();
+    window.location.href="/"
+    localStorage.removeItem("email");
+    localStorage.removeItem("name");
   }
 
   render() {

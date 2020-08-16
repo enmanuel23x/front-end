@@ -7,7 +7,7 @@ import Home from "./components/Home";
 import Profile from "./components/Profile";
 import SiderDemo from "./components/dashboard/Navigation";
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import keycloak from './config/keycloak';
+import config from './config/config';
 class App extends Component {
   render() {
     return (
@@ -17,7 +17,7 @@ class App extends Component {
             <Route exact path="/" component={Home} />
             <Route exact path="/perfil"  component={Profile}/>
             <Route path='/dashboard' render={props => (
-                keycloak.realmAccess.roles.includes("dashboard_admin")
+                config.admins.includes(localStorage.email)
                   ? <SiderDemo/>
                   : <Redirect to="/" />
                 )} />

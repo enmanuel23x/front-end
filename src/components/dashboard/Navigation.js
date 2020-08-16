@@ -10,7 +10,6 @@ import UsersTable from "./Users";
 import Skills from "./Skills";
 import Categories from "./Categories";
 import Groups from "./Groups";
-import keycloak from '../../config/keycloak';
 // Icons
 import {
     UserOutlined,
@@ -28,7 +27,9 @@ class SiderDemo extends React.Component {
         selected: 1
     };
     logout() {
-        keycloak.logout();
+        window.location.href="/"
+        localStorage.removeItem("email");
+        localStorage.removeItem("name");
       }
     render() {
         return (

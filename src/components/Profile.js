@@ -17,7 +17,6 @@ const axiosInstance = axios.create({
     })
   });
 const skillsPerPage = 1;
-import keycloak from "../config/keycloak"
 /* Write here the email address that will receive the messages  */
 const email = config.email;
 
@@ -26,8 +25,8 @@ class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        email: keycloak.idTokenParsed.email,
-        name: keycloak.idTokenParsed.name,
+        email: localStorage.email,
+        name: localStorage.name,
         id: null,
         full_name: null,
         group_name: null,
@@ -106,7 +105,7 @@ class Profile extends Component {
     async charge(){
       let days = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
       let obj=this;
-      let email=keycloak.idTokenParsed.email;
+      let email=localStorage.email;
       axiosInstance.get('/resource/users/'+email,
       {
         headers: { 'access-token': await utils.default.getTokenApi() }
@@ -139,7 +138,7 @@ class Profile extends Component {
 
       async function getDate(){
           let create = false;
-          axiosInstance.post('bd/data', {email: keycloak.idTokenParsed.email},
+          axiosInstance.post('bd/data', {email: localStorage.email},
           {
             headers: { 'access-token': await utils.default.getTokenApi() }
           })
@@ -158,7 +157,7 @@ class Profile extends Component {
                     obj.state.first_conn = first_connection;
                     obj.state.last_conn = last_connection;
                     }
-                  axiosInstance.post('bd/update', {email: keycloak.idTokenParsed.email, create: create},
+                  axiosInstance.post('bd/update', {email: localStorage.email, create: create},
                   {
                     headers: { 'access-token': await utils.default.getTokenApi() }
                   }).then(response => {
@@ -210,7 +209,7 @@ class Profile extends Component {
         if (status === 1){
             axiosInstance.post('/email/send', {"email": email, "subject": lack_skill,
                 // eslint-disable-next-line no-useless-concat
-                "text":"Colaborador: "+ keycloak.idTokenParsed.name +'\n' + "Correo: " + keycloak.idTokenParsed.email + '\n' + "Mensaje: " + obj.state.message},
+                "text":"Colaborador: "+ localStorage.name +'\n' + "Correo: " + localStorage.email + '\n' + "Mensaje: " + obj.state.message},
                 {
                   headers: { 'access-token': await utils.default.getTokenApi() }
                 }).then((res) =>{
@@ -235,7 +234,7 @@ class Profile extends Component {
         } else if (status === 0) {
             axiosInstance.post('/email/send', {"email": email, "subject": unregistered,
                 // eslint-disable-next-line no-useless-concat
-                "text":"Colaborador: "+ keycloak.idTokenParsed.name +'\n' + "Correo: " + keycloak.idTokenParsed.email + '\n' + "Mensaje: " + obj.state.message},
+                "text":"Colaborador: "+ localStorage.name +'\n' + "Correo: " + localStorage.email + '\n' + "Mensaje: " + obj.state.message},
                 {
                   headers: { 'access-token': await utils.default.getTokenApi() }
                 }).then((res) =>{
